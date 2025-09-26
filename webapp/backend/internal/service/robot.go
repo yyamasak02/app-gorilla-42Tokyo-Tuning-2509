@@ -56,55 +56,64 @@ func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, new
 }
 
 func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
-	n := len(orders)
-	bestValue := 0
-	var bestSet []model.Order
+	// n := len(orders)
+
+	// dp[w]: 容量wまでで得られる最大価値
+	dp := make([]int, robotCapacity+1)
+
+	// 選んだ注文のインデックスを保持するスライスのスライス
+	keepTrack := make([][]int, robotCapacity+1)
+
 	steps := 0
 	checkEvery := 16384
 
-	var dfs func(i, curWeight, curValue int, curSet []model.Order) bool
-	dfs = func(i, curWeight, curValue int, curSet []model.Order) bool {
-		if curWeight > robotCapacity {
-			return false
-		}
-		steps++
-		if checkEvery > 0 && steps%checkEvery == 0 {
-			select {
-			case <-ctx.Done():
-				return true
-			default:
+	for i, order := range orders {
+		for w := robotCapacity; w >= order.Weight; w-- {
+			// ctxキャンセルチェックを定期的に挟む
+			steps++
+			if checkEvery > 0 && steps%checkEvery == 0 {
+				select {
+				case <-ctx.Done():
+					return model.DeliveryPlan{}, ctx.Err()
+				default:
+				}
+			}
+
+			if dp[w-order.Weight]+order.Value > dp[w] {
+				dp[w] = dp[w-order.Weight] + order.Value
+
+				// 選んだ注文の更新（新規コピーにして追加）
+				newSet := make([]int, len(keepTrack[w-order.Weight]))
+				copy(newSet, keepTrack[w-order.Weight])
+				newSet = append(newSet, i)
+				keepTrack[w] = newSet
 			}
 		}
-		if i == n {
-			if curValue > bestValue {
-				bestValue = curValue
-				bestSet = append([]model.Order{}, curSet...)
-			}
-			return false
-		}
-
-		if dfs(i+1, curWeight, curValue, curSet) {
-			return true
-		}
-
-		order := orders[i]
-		return dfs(i+1, curWeight+order.Weight, curValue+order.Value, append(curSet, order))
 	}
 
-	canceled := dfs(0, 0, 0, nil)
-	if canceled {
-		return model.DeliveryPlan{}, ctx.Err()
+	// 最大価値と対応する注文セットを特定
+	maxValue := 0
+	maxIndex := 0
+	for w, val := range dp {
+		if val > maxValue {
+			maxValue = val
+			maxIndex = w
+		}
 	}
 
-	var totalWeight int
-	for _, o := range bestSet {
-		totalWeight += o.Weight
+	// 注文を復元
+	selectedIndexes := keepTrack[maxIndex]
+	selectedOrders := make([]model.Order, len(selectedIndexes))
+	totalWeight := 0
+	for i, idx := range selectedIndexes {
+		selectedOrders[i] = orders[idx]
+		totalWeight += orders[idx].Weight
 	}
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
-		TotalValue:  bestValue,
-		Orders:      bestSet,
+		TotalValue:  maxValue,
+		Orders:      selectedOrders,
 	}, nil
 }
