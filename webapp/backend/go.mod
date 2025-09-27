@@ -1,8 +1,8 @@
 module backend
 
-go 1.23.0
+go 1.24.0
 
-toolchain go1.23.11
+toolchain go1.24.7
 
 require (
 	github.com/XSAM/otelsql v0.39.0
@@ -10,6 +10,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/google/uuid v1.6.0
 	github.com/jmoiron/sqlx v1.4.0
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/riandyrn/otelchi v0.12.1
 	go.opentelemetry.io/otel v1.36.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0
@@ -17,6 +18,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.36.0
 	go.opentelemetry.io/otel/trace v1.36.0
 	golang.org/x/crypto v0.40.0
+	golang.org/x/sync v0.17.0
 )
 
 require (

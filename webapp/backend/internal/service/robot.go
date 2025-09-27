@@ -6,25 +6,53 @@ import (
 	"backend/internal/service/utils"
 	"context"
 	"log"
+	"sort"
+	"strconv"
+
+	"github.com/patrickmn/go-cache"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 type RobotService struct {
-	store *repository.Store
+	store     *repository.Store
+	planCache *cache.Cache
 }
 
-func NewRobotService(store *repository.Store) *RobotService {
-	return &RobotService{store: store}
+func NewRobotService(store *repository.Store, planCache *cache.Cache) *RobotService {
+	return &RobotService{store: store, planCache: planCache}
 }
 
 func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string, capacity int) (*model.DeliveryPlan, error) {
+	cacheKey := robotID + ":" + strconv.Itoa(capacity)
+	if s.planCache != nil {
+		if cachedPlan, found := s.planCache.Get(cacheKey); found {
+			if plan, ok := cachedPlan.(model.DeliveryPlan); ok {
+				planCopy := cloneDeliveryPlan(plan)
+				return &planCopy, nil
+			}
+			// 型が想定と異なる場合は安全のため削除
+			s.planCache.Delete(cacheKey)
+		}
+	}
+
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "GenerateDeliveryPlan")
+	defer span.End()
+	// スパン属性を追加（引数ベース）
+	span.SetAttributes(
+		attribute.String("robot.id", robotID),
+		attribute.Int("capacity", capacity),
+	)
 	var plan model.DeliveryPlan
 
 	err := utils.WithTimeout(ctx, func(ctx context.Context) error {
 		return s.store.ExecTx(ctx, func(txStore *repository.Store) error {
-			orders, err := txStore.OrderRepo.GetShippingOrders(ctx)
+			orders, err := txStore.OrderRepo.GetShippingOrders(ctx, capacity)
 			if err != nil {
 				return err
 			}
+			span.SetAttributes(attribute.Int("orders.shipping.count", len(orders)))
 			plan, err = selectOrdersForDelivery(ctx, orders, robotID, capacity)
 			if err != nil {
 				return err
@@ -46,65 +74,214 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	if err != nil {
 		return nil, err
 	}
+
+	if len(plan.Orders) == 0 {
+		span.SetAttributes(attribute.Bool("delivery_plan.empty", true))
+		span.AddEvent("delivery_plan_empty")
+	}
+
+	if s.planCache != nil {
+		planCopy := cloneDeliveryPlan(plan)
+		s.planCache.Set(cacheKey, planCopy, cache.DefaultExpiration)
+	}
 	return &plan, nil
 }
 
 func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, newStatus string) error {
 	return utils.WithTimeout(ctx, func(ctx context.Context) error {
-		return s.store.OrderRepo.UpdateStatuses(ctx, []int64{orderID}, newStatus)
+		if err := s.store.OrderRepo.UpdateStatuses(ctx, []int64{orderID}, newStatus); err != nil {
+			return err
+		}
+		if s.planCache != nil {
+			s.planCache.Flush()
+		}
+		return nil
 	})
 }
 
+func cloneDeliveryPlan(plan model.DeliveryPlan) model.DeliveryPlan {
+	ordersCopy := make([]model.Order, len(plan.Orders))
+	copy(ordersCopy, plan.Orders)
+	return model.DeliveryPlan{
+		RobotID:     plan.RobotID,
+		TotalWeight: plan.TotalWeight,
+		TotalValue:  plan.TotalValue,
+		Orders:      ordersCopy,
+	}
+}
+
 func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
-	n := len(orders)
-	bestValue := 0
-	var bestSet []model.Order
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "selectOrdersForDelivery")
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("robot.id", robotID),
+	)
+	span.SetAttributes(attribute.Int("orders.input.count", len(orders)))
+
+	type aggregatedItem struct {
+		weight int
+		value  int
+		orders []model.Order
+	}
+
+	grouped := make(map[int][]model.Order)
+	for _, order := range orders {
+		grouped[order.ProductID] = append(grouped[order.ProductID], order)
+	}
+
+	productIDs := make([]int, 0, len(grouped))
+	for productID := range grouped {
+		productIDs = append(productIDs, productID)
+	}
+	sort.Ints(productIDs)
+
+	aggregated := make([]aggregatedItem, 0, len(orders))
+	for _, productID := range productIDs {
+		productOrders := grouped[productID]
+		sort.Slice(productOrders, func(i, j int) bool {
+			return productOrders[i].OrderID < productOrders[j].OrderID
+		})
+
+		if len(productOrders) == 0 {
+			continue
+		}
+
+		unitWeight := productOrders[0].Weight
+		if unitWeight <= 0 {
+			for _, o := range productOrders {
+				aggregated = append(aggregated, aggregatedItem{
+					weight: o.Weight,
+					value:  o.Value,
+					orders: []model.Order{{OrderID: o.OrderID, Weight: o.Weight, Value: o.Value}},
+				})
+			}
+			continue
+		}
+		maxChunkByCapacity := robotCapacity / unitWeight
+		if maxChunkByCapacity == 0 {
+			// 1 件でも積めない重量ならスキップ
+			continue
+		}
+
+		remaining := len(productOrders)
+		index := 0
+		chunkSize := 1
+		for remaining > 0 {
+			actualChunk := chunkSize
+			if actualChunk > remaining {
+				actualChunk = remaining
+			}
+			if actualChunk > maxChunkByCapacity {
+				actualChunk = maxChunkByCapacity
+			}
+			if actualChunk == 0 {
+				break
+			}
+
+			ordersChunk := make([]model.Order, actualChunk)
+			weight := 0
+			value := 0
+			for i := 0; i < actualChunk; i++ {
+				src := productOrders[index+i]
+				ordersChunk[i] = model.Order{OrderID: src.OrderID, Weight: src.Weight, Value: src.Value}
+				weight += src.Weight
+				value += src.Value
+			}
+
+			aggregated = append(aggregated, aggregatedItem{
+				weight: weight,
+				value:  value,
+				orders: ordersChunk,
+			})
+
+			index += actualChunk
+			remaining -= actualChunk
+			if remaining == 0 {
+				break
+			}
+
+			if chunkSize < remaining {
+				nextSize := chunkSize * 2
+				if nextSize > maxChunkByCapacity {
+					nextSize = maxChunkByCapacity
+				}
+				if nextSize == 0 {
+					nextSize = 1
+				}
+				chunkSize = nextSize
+			}
+		}
+	}
+
+	// dp[w]: 容量wまでで得られる最大価値
+	dp := make([]int, robotCapacity+1)
+
+	// 選んだ注文のインデックスを保持するスライスのスライス
+	keepTrack := make([][]int, robotCapacity+1)
+
 	steps := 0
 	checkEvery := 16384
 
-	var dfs func(i, curWeight, curValue int, curSet []model.Order) bool
-	dfs = func(i, curWeight, curValue int, curSet []model.Order) bool {
-		if curWeight > robotCapacity {
-			return false
+	for i, item := range aggregated {
+		if item.weight > robotCapacity {
+			continue
 		}
-		steps++
-		if checkEvery > 0 && steps%checkEvery == 0 {
-			select {
-			case <-ctx.Done():
-				return true
-			default:
+		for w := robotCapacity; w >= item.weight; w-- {
+			steps++
+			if checkEvery > 0 && steps%checkEvery == 0 {
+				select {
+				case <-ctx.Done():
+					return model.DeliveryPlan{}, ctx.Err()
+				default:
+				}
+			}
+
+			if dp[w-item.weight]+item.value > dp[w] {
+				dp[w] = dp[w-item.weight] + item.value
+
+				newSet := make([]int, len(keepTrack[w-item.weight]))
+				copy(newSet, keepTrack[w-item.weight])
+				newSet = append(newSet, i)
+				keepTrack[w] = newSet
 			}
 		}
-		if i == n {
-			if curValue > bestValue {
-				bestValue = curValue
-				bestSet = append([]model.Order{}, curSet...)
-			}
-			return false
+	}
+
+	// 最大価値と対応する注文セットを特定
+	maxValue := 0
+	maxIndex := 0
+	for w, val := range dp {
+		if val > maxValue {
+			maxValue = val
+			maxIndex = w
 		}
+	}
 
-		if dfs(i+1, curWeight, curValue, curSet) {
-			return true
+	// 注文を復元
+	selectedIndexes := keepTrack[maxIndex]
+	selectedOrders := make([]model.Order, 0, len(selectedIndexes))
+	totalWeight := 0
+	span.SetAttributes(attribute.Int("aggregated.items", len(aggregated)))
+	for _, idx := range selectedIndexes {
+		aggregatedItem := aggregated[idx]
+		selectedOrders = append(selectedOrders, aggregatedItem.orders...)
+		for _, order := range aggregatedItem.orders {
+			totalWeight += order.Weight
 		}
-
-		order := orders[i]
-		return dfs(i+1, curWeight+order.Weight, curValue+order.Value, append(curSet, order))
 	}
 
-	canceled := dfs(0, 0, 0, nil)
-	if canceled {
-		return model.DeliveryPlan{}, ctx.Err()
-	}
-
-	var totalWeight int
-	for _, o := range bestSet {
-		totalWeight += o.Weight
-	}
+	span.SetAttributes(
+		attribute.Int("plan.orders.count", len(selectedOrders)),
+		attribute.Int("plan.totalWeight", totalWeight),
+		attribute.Int("plan.totalValue", maxValue),
+		attribute.Bool("plan.empty", len(selectedOrders) == 0),
+	)
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
-		TotalValue:  bestValue,
-		Orders:      bestSet,
+		TotalValue:  maxValue,
+		Orders:      selectedOrders, // []model.Order
 	}, nil
 }
