@@ -57,54 +57,59 @@ func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, new
 
 func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
 	n := len(orders)
-	bestValue := 0
-	var bestSet []model.Order
-	steps := 0
-	checkEvery := 16384
-
-	var dfs func(i, curWeight, curValue int, curSet []model.Order) bool
-	dfs = func(i, curWeight, curValue int, curSet []model.Order) bool {
-		if curWeight > robotCapacity {
-			return false
-		}
-		steps++
-		if checkEvery > 0 && steps%checkEvery == 0 {
-			select {
-			case <-ctx.Done():
-				return true
-			default:
-			}
-		}
-		if i == n {
-			if curValue > bestValue {
-				bestValue = curValue
-				bestSet = append([]model.Order{}, curSet...)
-			}
-			return false
-		}
-
-		if dfs(i+1, curWeight, curValue, curSet) {
-			return true
-		}
-
-		order := orders[i]
-		return dfs(i+1, curWeight+order.Weight, curValue+order.Value, append(curSet, order))
+	if n == 0 {
+		return model.DeliveryPlan{
+			RobotID:     robotID,
+			TotalWeight: 0,
+			TotalValue:  0,
+			Orders:      []model.Order{},
+		}, nil
 	}
 
-	canceled := dfs(0, 0, 0, nil)
-	if canceled {
-		return model.DeliveryPlan{}, ctx.Err()
+	// 動的プログラミングテーブル: dp[i][w] = 価値の最大値
+	// i: 最初のi個の注文を考慮
+	// w: 容量wまで使用可能
+	dp := make([][]int, n+1)
+	for i := range dp {
+		dp[i] = make([]int, robotCapacity+1)
+	}
+
+	// 動的プログラミングで最適解を計算
+	for i := 1; i <= n; i++ {
+		order := orders[i-1]
+		for w := 0; w <= robotCapacity; w++ {
+			// 注文iを選ばない場合
+			dp[i][w] = dp[i-1][w]
+			
+			// 注文iを選ぶ場合（容量に余裕がある場合のみ）
+			if w >= order.Weight {
+				if dp[i-1][w-order.Weight]+order.Value > dp[i][w] {
+					dp[i][w] = dp[i-1][w-order.Weight] + order.Value
+				}
+			}
+		}
+	}
+
+	// 最適解を復元
+	var selectedOrders []model.Order
+	w := robotCapacity
+	for i := n; i > 0; i-- {
+		if dp[i][w] != dp[i-1][w] {
+			// 注文i-1が選ばれている
+			selectedOrders = append([]model.Order{orders[i-1]}, selectedOrders...)
+			w -= orders[i-1].Weight
+		}
 	}
 
 	var totalWeight int
-	for _, o := range bestSet {
-		totalWeight += o.Weight
+	for _, order := range selectedOrders {
+		totalWeight += order.Weight
 	}
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
-		TotalValue:  bestValue,
-		Orders:      bestSet,
+		TotalValue:  dp[n][robotCapacity],
+		Orders:      selectedOrders,
 	}, nil
 }
