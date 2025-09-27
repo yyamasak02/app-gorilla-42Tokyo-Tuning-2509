@@ -66,9 +66,7 @@ func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, new
 	})
 }
 
-func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
-	// n := len(orders)
-
+func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
 	// dp[w]: 容量wまでで得られる最大価値
 	dp := make([]int, robotCapacity+1)
 
@@ -80,7 +78,6 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID 
 
 	for i, order := range orders {
 		for w := robotCapacity; w >= order.Weight; w-- {
-			// ctxキャンセルチェックを定期的に挟む
 			steps++
 			if checkEvery > 0 && steps%checkEvery == 0 {
 				select {
@@ -112,19 +109,25 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID 
 		}
 	}
 
-	// 注文を復元
+	// 注文を復元 & DeliveryOrder → Order に変換
 	selectedIndexes := keepTrack[maxIndex]
 	selectedOrders := make([]model.Order, len(selectedIndexes))
 	totalWeight := 0
 	for i, idx := range selectedIndexes {
-		selectedOrders[i] = orders[idx]
-		totalWeight += orders[idx].Weight
+		d := orders[idx] // DeliveryOrder
+		selectedOrders[i] = model.Order{
+			OrderID: d.OrderID,
+			Weight:  d.Weight,
+			Value:   d.Value,
+			// 他のフィールドは未取得なのでゼロ値/NULLのまま
+		}
+		totalWeight += d.Weight
 	}
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
 		TotalValue:  maxValue,
-		Orders:      selectedOrders,
+		Orders:      selectedOrders, // []model.Order
 	}, nil
 }
