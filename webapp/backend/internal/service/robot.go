@@ -214,16 +214,18 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID 
 		}
 	}
 
-	// dp[w]: 容量wまでで得られる最大価値
-	dp := make([]int, robotCapacity+1)
+	type dpEntry struct {
+		value  int
+		orders []model.Order
+	}
 
-	// 選んだ注文のインデックスを保持するスライスのスライス
-	keepTrack := make([][]int, robotCapacity+1)
+	// dp[w]: 容量wまでで得られる最大価値と採用した注文一覧
+	dp := make([]dpEntry, robotCapacity+1)
 
 	steps := 0
 	checkEvery := 16384
 
-	for i, item := range aggregated {
+	for _, item := range aggregated {
 		if item.weight > robotCapacity {
 			continue
 		}
@@ -237,51 +239,77 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID 
 				}
 			}
 
-			if dp[w-item.weight]+item.value > dp[w] {
-				dp[w] = dp[w-item.weight] + item.value
+			prev := dp[w-item.weight]
+			candidateValue := prev.value + item.value
+			candidateOrders := make([]model.Order, len(prev.orders)+len(item.orders))
+			copy(candidateOrders, prev.orders)
+			copy(candidateOrders[len(prev.orders):], item.orders)
 
-				newSet := make([]int, len(keepTrack[w-item.weight]))
-				copy(newSet, keepTrack[w-item.weight])
-				newSet = append(newSet, i)
-				keepTrack[w] = newSet
+			if candidateValue > dp[w].value || (candidateValue == dp[w].value && lexicographicalLess(candidateOrders, dp[w].orders)) {
+				dp[w] = dpEntry{value: candidateValue, orders: candidateOrders}
 			}
 		}
 	}
 
 	// 最大価値と対応する注文セットを特定
-	maxValue := 0
-	maxIndex := 0
-	for w, val := range dp {
-		if val > maxValue {
-			maxValue = val
-			maxIndex = w
+	bestValue := 0
+	bestOrders := []model.Order{}
+	for _, entry := range dp {
+		if entry.value > bestValue || (entry.value == bestValue && lexicographicalLess(entry.orders, bestOrders)) {
+			bestValue = entry.value
+			bestOrders = entry.orders
 		}
 	}
 
-	// 注文を復元
-	selectedIndexes := keepTrack[maxIndex]
-	selectedOrders := make([]model.Order, 0, len(selectedIndexes))
-	totalWeight := 0
 	span.SetAttributes(attribute.Int("aggregated.items", len(aggregated)))
-	for _, idx := range selectedIndexes {
-		aggregatedItem := aggregated[idx]
-		selectedOrders = append(selectedOrders, aggregatedItem.orders...)
-		for _, order := range aggregatedItem.orders {
-			totalWeight += order.Weight
-		}
+
+	totalWeight := 0
+	for _, o := range bestOrders {
+		totalWeight += o.Weight
 	}
 
 	span.SetAttributes(
-		attribute.Int("plan.orders.count", len(selectedOrders)),
+		attribute.Int("plan.orders.count", len(bestOrders)),
 		attribute.Int("plan.totalWeight", totalWeight),
-		attribute.Int("plan.totalValue", maxValue),
-		attribute.Bool("plan.empty", len(selectedOrders) == 0),
+		attribute.Int("plan.totalValue", bestValue),
+		attribute.Bool("plan.empty", len(bestOrders) == 0),
 	)
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
-		TotalValue:  maxValue,
-		Orders:      selectedOrders, // []model.Order
+		TotalValue:  bestValue,
+		Orders:      bestOrders, // []model.Order
 	}, nil
+}
+
+func lexicographicalLess(a, b []model.Order) bool {
+	if len(b) == 0 && len(a) > 0 {
+		return true
+	}
+	minLen := len(a)
+	if len(b) < minLen {
+		minLen = len(b)
+	}
+	for i := 0; i < minLen; i++ {
+		if a[i].OrderID < b[i].OrderID {
+			return true
+		}
+		if a[i].OrderID > b[i].OrderID {
+			return false
+		}
+		if a[i].Weight < b[i].Weight {
+			return true
+		}
+		if a[i].Weight > b[i].Weight {
+			return false
+		}
+		if a[i].Value < b[i].Value {
+			return true
+		}
+		if a[i].Value > b[i].Value {
+			return false
+		}
+	}
+	return len(a) < len(b)
 }
