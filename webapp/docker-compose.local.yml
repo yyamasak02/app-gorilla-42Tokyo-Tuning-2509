@@ -4,6 +4,7 @@ services:
   # ----------------------------------------------------
   backend:
     container_name: tuning-backend
+    restart: unless-stopped
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
@@ -11,7 +12,7 @@ services:
       TRACE_ENABLED: "true"
       JAEGER_ENDPOINT: "http://jaeger:14268/api/traces"
       TRACE_SAMPLE_RATIO: "1.0"
-      DATABASE_URL: user:password@tcp(db:3306)/42Tokyo2508-db
+      DATABASE_URL: user:password@tcp(proxysql:6033)/42Tokyo2508-db
       PORT: 8080
     working_dir: /usr/src/backend
     volumes:
@@ -22,7 +23,7 @@ services:
     networks:
       - webapp-network
     depends_on:
-      db:
+      proxysql:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:${PORT:-8080}/api/health || exit 1"]
@@ -98,6 +99,28 @@ services:
       timeout: 30s
       retries: 10
       start_period: 1500s
+
+  proxysql:
+    container_name: tuning-proxysql
+    image: proxysql/proxysql:latest
+    command: ["sh", "-c", "proxysql --config /etc/proxysql.cnf --initial && proxysql -f --config /etc/proxysql.cnf"]
+    volumes:
+      - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
+      - proxysql-data:/var/lib/proxysql
+    networks:
+      - webapp-network
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-h", "127.0.0.1", "-P", "6033", "-u", "user", "-ppassword", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    ports:
+      - "16033:6033"
+      - "16032:6032"
   # ----------------------------------------------------
   # Nginx サービス: リバースプロキシと静的ファイル配信
   # ----------------------------------------------------
@@ -139,3 +162,6 @@ networks:
   webapp-network:
     name: webapp-network
     external: true
+
+volumes:
+  proxysql-data:
