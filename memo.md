@@ -97,3 +97,14 @@ userJourneyScenario2の実行回数を向上させるため、データベース
 
 ### 目的
 検索クエリの効率化とインデックス活用の向上により、userJourneyScenarioの実行回数を改善。
+
+## ログインAPI高速化 -> score 改善予定
+
+### 変更内容
+- **セッションテーブルインデックス**: `user_sessions(session_uuid)` と `user_sessions(expires_at)` インデックス追加
+- **ユーザー検索クエリ最適化**: `SELECT user_id, password_hash, user_name` → `SELECT user_id, password_hash`（不要なuser_nameカラム削除）
+- **ログ出力削除**: デバッグ用ログ出力を削除してレスポンス時間短縮
+- **コード整理**: インデント修正と構文エラー修正
+
+### 目的
+ログインAPIのレスポンス時間を短縮し、ユーザー認証フローの高速化を実現。データベースクエリの効率化とネットワーク転送量の削減により、全体的なパフォーマンス向上を目指す。
