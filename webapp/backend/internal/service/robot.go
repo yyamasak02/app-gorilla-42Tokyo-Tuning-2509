@@ -67,6 +67,12 @@ func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, new
 }
 
 func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "selectOrdersForDelivery")
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("robot.id", robotID),
+	)
 	// dp[w]: 容量wまでで得られる最大価値
 	dp := make([]int, robotCapacity+1)
 
