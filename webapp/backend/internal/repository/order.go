@@ -103,16 +103,11 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 			o.product_id,
 			p.weight,
 			p.value
-		FROM (
-			SELECT order_id, product_id
-			FROM orders
-			WHERE shipped_status = 'shipping'
-		) o
-		JOIN (
-			SELECT product_id, weight, value
-			FROM products
-			WHERE weight <= ?
-		) p ON o.product_id = p.product_id;
+		FROM orders o
+		JOIN products p ON o.product_id = p.product_id
+		WHERE o.shipped_status = 'shipping'
+		AND p.weight <= ?
+		ORDER BY p.value DESC,p.weight ASC,o.order_id ASC;
 	`
 	err := r.db.SelectContext(ctx, &orders, query, capacity)
 
