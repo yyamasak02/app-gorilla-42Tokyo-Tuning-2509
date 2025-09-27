@@ -6,20 +6,35 @@ import (
 	"backend/internal/service/utils"
 	"context"
 	"log"
+	"strconv"
 
+	"github.com/patrickmn/go-cache"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 )
 
 type RobotService struct {
-	store *repository.Store
+	store     *repository.Store
+	planCache *cache.Cache
 }
 
-func NewRobotService(store *repository.Store) *RobotService {
-	return &RobotService{store: store}
+func NewRobotService(store *repository.Store, planCache *cache.Cache) *RobotService {
+	return &RobotService{store: store, planCache: planCache}
 }
 
 func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string, capacity int) (*model.DeliveryPlan, error) {
+	cacheKey := robotID + ":" + strconv.Itoa(capacity)
+	if s.planCache != nil {
+		if cachedPlan, found := s.planCache.Get(cacheKey); found {
+			if plan, ok := cachedPlan.(model.DeliveryPlan); ok {
+				planCopy := cloneDeliveryPlan(plan)
+				return &planCopy, nil
+			}
+			// 型が想定と異なる場合は安全のため削除
+			s.planCache.Delete(cacheKey)
+		}
+	}
+
 	tracer := otel.Tracer("app/custom")
 	ctx, span := tracer.Start(ctx, "GenerateDeliveryPlan")
 	defer span.End()
@@ -57,13 +72,35 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	if err != nil {
 		return nil, err
 	}
+
+	if s.planCache != nil {
+		planCopy := cloneDeliveryPlan(plan)
+		s.planCache.Set(cacheKey, planCopy, cache.DefaultExpiration)
+	}
 	return &plan, nil
 }
 
 func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, newStatus string) error {
 	return utils.WithTimeout(ctx, func(ctx context.Context) error {
-		return s.store.OrderRepo.UpdateStatuses(ctx, []int64{orderID}, newStatus)
+		if err := s.store.OrderRepo.UpdateStatuses(ctx, []int64{orderID}, newStatus); err != nil {
+			return err
+		}
+		if s.planCache != nil {
+			s.planCache.Flush()
+		}
+		return nil
 	})
+}
+
+func cloneDeliveryPlan(plan model.DeliveryPlan) model.DeliveryPlan {
+	ordersCopy := make([]model.Order, len(plan.Orders))
+	copy(ordersCopy, plan.Orders)
+	return model.DeliveryPlan{
+		RobotID:     plan.RobotID,
+		TotalWeight: plan.TotalWeight,
+		TotalValue:  plan.TotalValue,
+		Orders:      ordersCopy,
+	}
 }
 
 func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
