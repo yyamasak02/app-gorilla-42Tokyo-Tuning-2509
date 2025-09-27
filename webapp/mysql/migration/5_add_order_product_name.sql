@@ -3,7 +3,7 @@ USE `42tokyo2508-db`;
 ALTER TABLE orders
 ADD COLUMN product_name VARCHAR(255);
 
-DELIMITER //
+DELIMITER $$
 CREATE PROCEDURE BatchUpdateOrdersName()
 BEGIN
     DECLARE updated_rows INT DEFAULT 1;
@@ -18,7 +18,7 @@ BEGIN
         );
         SELECT ROW_COUNT() INTO updated_rows;
     END WHILE;
-END //
+END$$
 DELIMITER ;
 
 CALL BatchUpdateOrdersName();

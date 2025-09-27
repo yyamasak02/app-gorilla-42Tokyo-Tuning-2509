@@ -4,7 +4,7 @@ ALTER TABLE orders
 ADD COLUMN product_weight INT,
 ADD COLUMN product_value INT;
 
-DELIMITER //
+DELIMITER $$
 CREATE PROCEDURE BatchUpdateOrdersMetrics()
 BEGIN
     DECLARE updated_rows INT DEFAULT 1;
@@ -19,7 +19,7 @@ BEGIN
         );
         SELECT ROW_COUNT() INTO updated_rows;
     END WHILE;
-END //
+END$$
 DELIMITER ;
 
 CALL BatchUpdateOrdersMetrics();
