@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"backend/internal/model"
@@ -32,11 +33,17 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 
 	err := s.store.ExecTx(ctx, func(txStore *repository.Store) error {
 		var orders []*model.Order
+		productIDs := make([]int, 0)
+		productSeen := make(map[int]struct{})
 
 		// まとめてオーダーを構築
 		for _, item := range items {
 			if item.Quantity <= 0 {
 				continue
+			}
+			if _, ok := productSeen[item.ProductID]; !ok {
+				productIDs = append(productIDs, item.ProductID)
+				productSeen[item.ProductID] = struct{}{}
 			}
 			for i := 0; i < item.Quantity; i++ {
 				orders = append(orders, &model.Order{
@@ -51,6 +58,28 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 		if orderCount == 0 {
 			span.AddEvent("no_orders_to_insert")
 			return nil
+		}
+
+		weights, err := txStore.ProductRepo.FetchWeightsAndValues(ctx, productIDs)
+		if err != nil {
+			return err
+		}
+		names, err := txStore.ProductRepo.FetchProductNames(ctx, productIDs)
+		if err != nil {
+			return err
+		}
+		for _, order := range orders {
+			wv, ok := weights[order.ProductID]
+			if !ok {
+				return fmt.Errorf("product %d not found during order creation", order.ProductID)
+			}
+			name, ok := names[order.ProductID]
+			if !ok {
+				return fmt.Errorf("product %d name not found during order creation", order.ProductID)
+			}
+			order.Weight = wv.Weight
+			order.Value = wv.Value
+			order.ProductName = name
 		}
 
 		// バルクINSERTに対応したリポジトリメソッドを利用

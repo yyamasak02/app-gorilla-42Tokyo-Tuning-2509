@@ -27,14 +27,14 @@ func (r *OrderRepository) CreateBulk(ctx context.Context, orders []*model.Order)
 	}
 
 	placeholders := make([]string, len(orders))
-	vals := make([]interface{}, 0, len(orders)*2)
+	vals := make([]interface{}, 0, len(orders)*5)
 
 	for i, o := range orders {
-		placeholders[i] = "(?, ?, 'shipping', NOW())"
-		vals = append(vals, o.UserID, o.ProductID)
+		placeholders[i] = "(?, ?, 'shipping', NOW(), ?, ?, ?)"
+		vals = append(vals, o.UserID, o.ProductID, o.ProductName, o.Weight, o.Value)
 	}
 
-	query := "INSERT INTO orders (user_id, product_id, shipped_status, created_at) VALUES " +
+	query := "INSERT INTO orders (user_id, product_id, shipped_status, created_at, product_name, product_weight, product_value) VALUES " +
 		strings.Join(placeholders, ",")
 
 	result, err := r.db.ExecContext(ctx, query, vals...)
@@ -58,8 +58,8 @@ func (r *OrderRepository) CreateBulk(ctx context.Context, orders []*model.Order)
 
 // 注文を作成し、生成された注文IDを返す
 func (r *OrderRepository) Create(ctx context.Context, order *model.Order) (string, error) {
-	query := `INSERT INTO orders (user_id, product_id, shipped_status, created_at) VALUES (?, ?, 'shipping', NOW())`
-	result, err := r.db.ExecContext(ctx, query, order.UserID, order.ProductID)
+	query := `INSERT INTO orders (user_id, product_id, shipped_status, created_at, product_name, product_weight, product_value) VALUES (?, ?, 'shipping', NOW(), ?, ?, ?)`
+	result, err := r.db.ExecContext(ctx, query, order.UserID, order.ProductID, order.ProductName, order.Weight, order.Value)
 	if err != nil {
 		return "", err
 	}
@@ -99,18 +99,17 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 	var orders []model.Order
 	query := `
 		SELECT
-			o.order_id,
-			o.product_id,
-			p.weight,
-			p.value
-		FROM orders o
-		JOIN products p ON o.product_id = p.product_id
-		WHERE 1= 1
-		AND
-			o.shipped_status = 'shipping'
-		ORDER BY p.value DESC,p.weight ASC,o.order_id ASC;
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= ?
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
 	`
-	err := r.db.SelectContext(ctx, &orders, query)
+	err := r.db.SelectContext(ctx, &orders, query, capacity)
 
 	span.SetAttributes(
 		attribute.String("zokusei", "GetShippingOrders"),
@@ -128,6 +127,8 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 		ProductID     int          `db:"product_id"`
 		ProductName   string       `db:"product_name"`
 		ShippedStatus string       `db:"shipped_status"`
+		ProductWeight int          `db:"product_weight"`
+		ProductValue  int          `db:"product_value"`
 		CreatedAt     sql.NullTime `db:"created_at"`
 		ArrivedAt     sql.NullTime `db:"arrived_at"`
 	}
@@ -138,16 +139,14 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 		SELECT 
 			o.order_id, 
 			o.product_id, 
-			p.name AS product_name,
+			o.product_name,
 		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
 			o.created_at, 
 			o.arrived_at
 		FROM 
 			orders o
-		JOIN 
-			products p 
-			ON 
-				o.product_id = p.product_id
 		WHERE 1 = 1
 		AND o.user_id = ?
 	`
@@ -155,7 +154,7 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 	whereClause := ""
 
 	if req.Search != "" {
-		whereClause = " AND p.name LIKE ?"
+		whereClause = " AND o.product_name LIKE ?"
 		if req.Type == "prefix" {
 			args = append(args, req.Search+"%")
 		} else {
@@ -165,7 +164,7 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 
 	// バリデーション付きでソートフィールド選定
 	sortFieldMap := map[string]string{
-		"product_name":   "p.name",
+		"product_name":   "o.product_name",
 		"created_at":     "o.created_at",
 		"shipped_status": "o.shipped_status",
 		"arrived_at":     "o.arrived_at",
@@ -198,17 +197,11 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 	// 総件数取得
 	var total int
 	countQuery := `
-		SELECT 
-			COUNT(*) 
-		FROM 
-			orders o 
-			JOIN 
-				products p 
-			ON 
-				o.product_id = p.product_id 
+		SELECT COUNT(*)
+		FROM orders o
 		WHERE 1=1
-		AND	o.user_id = ?
-	` + whereClause
+		AND o.user_id = ?
+	` + strings.ReplaceAll(whereClause, "p.name", "o.product_name")
 	countArgs := args[:len(args)-2] // LIMIT/OFFSETを除外
 	if err := r.db.GetContext(ctx, &total, countQuery, countArgs...); err != nil {
 		return nil, 0, err
@@ -222,6 +215,8 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 			ProductID:     o.ProductID,
 			ProductName:   o.ProductName,
 			ShippedStatus: o.ShippedStatus,
+			Weight:        o.ProductWeight,
+			Value:         o.ProductValue,
 			CreatedAt:     o.CreatedAt.Time,
 			ArrivedAt:     o.ArrivedAt,
 		})
