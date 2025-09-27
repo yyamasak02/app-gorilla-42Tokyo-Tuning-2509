@@ -21,15 +21,15 @@ type Product struct {
 }
 
 type Order struct {
-	OrderID       int64        `db:"order_id"        json:"order_id"`
-	UserID        int          `db:"user_id"         json:"user_id"`
-	ProductID     int          `db:"product_id"      json:"product_id"`
-	ProductName   string       `db:"product_name"    json:"product_name"`
-	ShippedStatus string       `db:"shipped_status"  json:"shipped_status"`
-	Weight        int          `db:"weight"          json:"weight"`
-	Value         int          `db:"value"           json:"value"`
-	CreatedAt     time.Time    `db:"created_at"      json:"created_at"`
-	ArrivedAt     sql.NullTime `db:"arrived_at"      json:"arrived_at"`
+	OrderID       int64        `db:"order_id"         json:"order_id"`
+	UserID        int          `db:"user_id"          json:"user_id"`
+	ProductID     int          `db:"product_id"       json:"product_id"`
+	ProductName   string       `db:"product_name"     json:"product_name"`
+	ShippedStatus string       `db:"shipped_status"   json:"shipped_status"`
+	Weight        int          `db:"product_weight"   json:"weight"`
+	Value         int          `db:"product_value"    json:"value"`
+	CreatedAt     time.Time    `db:"created_at"       json:"created_at"`
+	ArrivedAt     sql.NullTime `db:"arrived_at"       json:"arrived_at"`
 }
 
 type DeliveryPlan struct {
