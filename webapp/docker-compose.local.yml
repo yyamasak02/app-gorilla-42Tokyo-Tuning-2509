@@ -102,8 +102,11 @@ services:
 
   proxysql:
     container_name: tuning-proxysql
-    image: proxysql/proxysql:latest
-    command: ["sh", "-c", "proxysql --config /etc/proxysql.cnf --initial && proxysql -f --config /etc/proxysql.cnf"]
+    image: proxysql/proxysql:2.6.2
+    # 起動時に古い /var/lib/proxysql/proxysql.db を削除して新規作成
+    command: >
+      sh -c "rm -f /var/lib/proxysql/proxysql.db &&
+             exec proxysql -f --config /etc/proxysql.cnf"
     volumes:
       - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
     networks:
