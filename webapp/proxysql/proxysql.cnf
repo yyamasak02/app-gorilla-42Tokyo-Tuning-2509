@@ -24,5 +24,6 @@ mysql_users = (
 )
 
 mysql_query_rules = (
-  { rule_id = 1, active = 1, match_pattern = ".*", destination_hostgroup = 0, apply = 1 }
+  { rule_id = 1, active = 1, match_digest = "^SELECT.*FROM products", cache_ttl = 5000, apply = 1 },
+  { rule_id = 2, active = 1, match_pattern = ".*", destination_hostgroup = 0, apply = 1 }
 )
