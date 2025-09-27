@@ -7,16 +7,18 @@ import (
 	"backend/internal/model"
 	"backend/internal/repository"
 
+	"github.com/patrickmn/go-cache"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 )
 
 type ProductService struct {
-	store *repository.Store
+	store     *repository.Store
+	planCache *cache.Cache
 }
 
-func NewProductService(store *repository.Store) *ProductService {
-	return &ProductService{store: store}
+func NewProductService(store *repository.Store, planCache *cache.Cache) *ProductService {
+	return &ProductService{store: store, planCache: planCache}
 }
 
 func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []model.RequestItem) ([]string, error) {
@@ -60,6 +62,9 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 		return nil, err
 	}
 	log.Printf("Created %d orders for user %d", len(insertedOrderIDs), userID)
+	if s.planCache != nil {
+		s.planCache.Flush()
+	}
 	return insertedOrderIDs, nil
 }
 
