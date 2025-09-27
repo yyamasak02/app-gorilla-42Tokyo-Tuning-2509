@@ -5,6 +5,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/jmoiron/sqlx"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"golang.org/x/sync/errgroup"
@@ -98,4 +99,51 @@ func (r *ProductRepository) CountProducts(ctx context.Context, whereClause strin
 	}
 	span.SetAttributes(attribute.Int("products.count", total))
 	return total, nil
+}
+
+func (r *ProductRepository) FetchProductNames(ctx context.Context, productIDs []int) (map[int]string, error) {
+	if len(productIDs) == 0 {
+		return map[int]string{}, nil
+	}
+	query, args, err := sqlx.In("SELECT product_id, name FROM products WHERE product_id IN (?)", productIDs)
+	if err != nil {
+		return nil, err
+	}
+	query = r.db.Rebind(query)
+	rows := []struct {
+		ProductID int    `db:"product_id"`
+		Name      string `db:"name"`
+	}{}
+	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+		return nil, err
+	}
+	result := make(map[int]string, len(rows))
+	for _, row := range rows {
+		result[row.ProductID] = row.Name
+	}
+	return result, nil
+}
+
+func (r *ProductRepository) FetchWeightsAndValues(ctx context.Context, productIDs []int) (map[int]struct{ Weight, Value int }, error) {
+	if len(productIDs) == 0 {
+		return map[int]struct{ Weight, Value int }{}, nil
+	}
+	query, args, err := sqlx.In("SELECT product_id, weight, value FROM products WHERE product_id IN (?)", productIDs)
+	if err != nil {
+		return nil, err
+	}
+	query = r.db.Rebind(query)
+	rows := []struct {
+		ProductID int `db:"product_id"`
+		Weight    int `db:"weight"`
+		Value     int `db:"value"`
+	}{}
+	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+		return nil, err
+	}
+	result := make(map[int]struct{ Weight, Value int }, len(rows))
+	for _, row := range rows {
+		result[row.ProductID] = struct{ Weight, Value int }{Weight: row.Weight, Value: row.Value}
+	}
+	return result, nil
 }
