@@ -21,7 +21,7 @@ func NewRobotService(store *repository.Store) *RobotService {
 
 func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string, capacity int) (*model.DeliveryPlan, error) {
 	tracer := otel.Tracer("app/custom")
-	ctx, span := tracer.Start(ctx, "GetDeliveryPlan")
+	ctx, span := tracer.Start(ctx, "GenerateDeliveryPlan")
 	defer span.End()
 	// スパン属性を追加（引数ベース）
 	span.SetAttributes(

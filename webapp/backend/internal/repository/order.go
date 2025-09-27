@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 type OrderRepository struct {
@@ -71,6 +73,12 @@ func (r *OrderRepository) Create(ctx context.Context, order *model.Order) (strin
 // 複数の注文IDのステータスを一括で更新
 // 主に配送ロボットが注文を引き受けた際に一括更新をするために使用
 func (r *OrderRepository) UpdateStatuses(ctx context.Context, orderIDs []int64, newStatus string) error {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "UpdateStatuses")
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("newStatus", newStatus),
+	)
 	if len(orderIDs) == 0 {
 		return nil
 	}
@@ -85,6 +93,12 @@ func (r *OrderRepository) UpdateStatuses(ctx context.Context, orderIDs []int64, 
 
 // 配送中(shipped_status:shipping)の注文一覧を取得
 func (r *OrderRepository) GetShippingOrders(ctx context.Context) ([]model.Order, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "GetShippingOrders")
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("zokusei", "GetShippingOrders"),
+	)
 	var orders []model.Order
 	query := `
         SELECT
