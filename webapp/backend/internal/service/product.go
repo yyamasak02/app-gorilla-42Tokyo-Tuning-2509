@@ -84,6 +84,18 @@ func countPositiveQuantities(items []model.RequestItem) int {
 }
 
 func (s *ProductService) FetchProducts(ctx context.Context, userID int, req model.ListRequest) ([]model.Product, int, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "FetchProducts")
+	defer span.End()
+	span.SetAttributes(
+		attribute.Int("user.id", userID),
+		attribute.Int("page", req.Page),
+		attribute.Int("pageSize", req.PageSize),
+	)
+
 	products, total, err := s.store.ProductRepo.ListProducts(ctx, userID, req)
+	if err != nil {
+		span.RecordError(err)
+	}
 	return products, total, err
 }
