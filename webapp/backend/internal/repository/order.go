@@ -102,14 +102,20 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 	)
 	var orders []model.DeliveryOrder
 	query := `
-        SELECT
-            o.order_id,
-            p.weight,
-            p.value
-        FROM orders o
-        JOIN products p ON o.product_id = p.product_id
-        WHERE o.shipped_status = 'shipping'
-			AND p.weight <= ?
+		SELECT
+			o.order_id,
+			p.weight,
+			p.value
+		FROM (
+			SELECT order_id, product_id
+			FROM orders
+			WHERE shipped_status = 'shipping'
+		) o
+		JOIN (
+			SELECT product_id, weight, value
+			FROM products
+			WHERE weight <= ?
+		) p ON o.product_id = p.product_id;
     `
 	err := r.db.SelectContext(ctx, &orders, query, capacity)
 	return orders, err
