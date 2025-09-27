@@ -33,9 +33,10 @@ type Order struct {
 }
 
 type DeliveryOrder struct {
-	OrderID int64 `db:"order_id"`
-	Weight  int   `db:"weight"`
-	Value   int   `db:"value"`
+	OrderID   int64 `db:"order_id"`
+	ProductID int   `db:"product_id"`
+	Weight    int   `db:"weight"`
+	Value     int   `db:"value"`
 }
 
 type DeliveryPlan struct {

@@ -6,6 +6,7 @@ import (
 	"backend/internal/service/utils"
 	"context"
 	"log"
+	"sort"
 	"strconv"
 
 	"github.com/patrickmn/go-cache"
@@ -51,6 +52,7 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 			if err != nil {
 				return err
 			}
+			span.SetAttributes(attribute.Int("orders.shipping.count", len(orders)))
 			plan, err = selectOrdersForDelivery(ctx, orders, robotID, capacity)
 			if err != nil {
 				return err
@@ -71,6 +73,10 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if len(plan.Orders) == 0 {
+		span.AddEvent("delivery_plan_empty")
 	}
 
 	if s.planCache != nil {
@@ -110,6 +116,101 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 	span.SetAttributes(
 		attribute.String("robot.id", robotID),
 	)
+	span.SetAttributes(attribute.Int("orders.input.count", len(orders)))
+
+	type aggregatedItem struct {
+		weight int
+		value  int
+		orders []model.DeliveryOrder
+	}
+
+	grouped := make(map[int][]model.DeliveryOrder)
+	for _, order := range orders {
+		grouped[order.ProductID] = append(grouped[order.ProductID], order)
+	}
+
+	productIDs := make([]int, 0, len(grouped))
+	for productID := range grouped {
+		productIDs = append(productIDs, productID)
+	}
+	sort.Ints(productIDs)
+
+	aggregated := make([]aggregatedItem, 0, len(orders))
+	for _, productID := range productIDs {
+		productOrders := grouped[productID]
+		sort.Slice(productOrders, func(i, j int) bool {
+			return productOrders[i].OrderID < productOrders[j].OrderID
+		})
+
+		if len(productOrders) == 0 {
+			continue
+		}
+
+		unitWeight := productOrders[0].Weight
+		if unitWeight <= 0 {
+			for _, o := range productOrders {
+				aggregated = append(aggregated, aggregatedItem{
+					weight: o.Weight,
+					value:  o.Value,
+					orders: []model.DeliveryOrder{o},
+				})
+			}
+			continue
+		}
+		maxChunkByCapacity := robotCapacity / unitWeight
+		if maxChunkByCapacity == 0 {
+			// 1 件でも積めない重量ならスキップ
+			continue
+		}
+
+		remaining := len(productOrders)
+		index := 0
+		chunkSize := 1
+		for remaining > 0 {
+			actualChunk := chunkSize
+			if actualChunk > remaining {
+				actualChunk = remaining
+			}
+			if actualChunk > maxChunkByCapacity {
+				actualChunk = maxChunkByCapacity
+			}
+			if actualChunk == 0 {
+				break
+			}
+
+			ordersChunk := append([]model.DeliveryOrder(nil), productOrders[index:index+actualChunk]...)
+			weight := 0
+			value := 0
+			for _, o := range ordersChunk {
+				weight += o.Weight
+				value += o.Value
+			}
+
+			aggregated = append(aggregated, aggregatedItem{
+				weight: weight,
+				value:  value,
+				orders: ordersChunk,
+			})
+
+			index += actualChunk
+			remaining -= actualChunk
+			if remaining == 0 {
+				break
+			}
+
+			if chunkSize < remaining {
+				nextSize := chunkSize * 2
+				if nextSize > maxChunkByCapacity {
+					nextSize = maxChunkByCapacity
+				}
+				if nextSize == 0 {
+					nextSize = 1
+				}
+				chunkSize = nextSize
+			}
+		}
+	}
+
 	// dp[w]: 容量wまでで得られる最大価値
 	dp := make([]int, robotCapacity+1)
 
@@ -119,8 +220,11 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 	steps := 0
 	checkEvery := 16384
 
-	for i, order := range orders {
-		for w := robotCapacity; w >= order.Weight; w-- {
+	for i, item := range aggregated {
+		if item.weight > robotCapacity {
+			continue
+		}
+		for w := robotCapacity; w >= item.weight; w-- {
 			steps++
 			if checkEvery > 0 && steps%checkEvery == 0 {
 				select {
@@ -130,12 +234,11 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 				}
 			}
 
-			if dp[w-order.Weight]+order.Value > dp[w] {
-				dp[w] = dp[w-order.Weight] + order.Value
+			if dp[w-item.weight]+item.value > dp[w] {
+				dp[w] = dp[w-item.weight] + item.value
 
-				// 選んだ注文の更新（新規コピーにして追加）
-				newSet := make([]int, len(keepTrack[w-order.Weight]))
-				copy(newSet, keepTrack[w-order.Weight])
+				newSet := make([]int, len(keepTrack[w-item.weight]))
+				copy(newSet, keepTrack[w-item.weight])
 				newSet = append(newSet, i)
 				keepTrack[w] = newSet
 			}
@@ -154,18 +257,26 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 
 	// 注文を復元 & DeliveryOrder → Order に変換
 	selectedIndexes := keepTrack[maxIndex]
-	selectedOrders := make([]model.Order, len(selectedIndexes))
+	selectedOrders := make([]model.Order, 0, len(selectedIndexes))
 	totalWeight := 0
-	for i, idx := range selectedIndexes {
-		d := orders[idx] // DeliveryOrder
-		selectedOrders[i] = model.Order{
-			OrderID: d.OrderID,
-			Weight:  d.Weight,
-			Value:   d.Value,
-			// 他のフィールドは未取得なのでゼロ値/NULLのまま
+	span.SetAttributes(attribute.Int("aggregated.items", len(aggregated)))
+	for _, idx := range selectedIndexes {
+		aggregatedItem := aggregated[idx]
+		for _, order := range aggregatedItem.orders {
+			selectedOrders = append(selectedOrders, model.Order{
+				OrderID: order.OrderID,
+				Weight:  order.Weight,
+				Value:   order.Value,
+				// 他のフィールドは未取得なのでゼロ値/NULLのまま
+			})
+			totalWeight += order.Weight
 		}
-		totalWeight += d.Weight
 	}
+	span.SetAttributes(
+		attribute.Int("plan.orders.count", len(selectedOrders)),
+		attribute.Int("plan.totalWeight", totalWeight),
+		attribute.Int("plan.totalValue", maxValue),
+	)
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,

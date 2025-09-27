@@ -28,7 +28,7 @@ func NewServer() (*Server, *sqlx.DB, error) {
 	}
 
 	store := repository.NewStore(dbConn)
-	deliveryCache := cache.New(5*time.Second, 10*time.Second)
+	deliveryCache := cache.New(30*time.Second, 30*time.Second)
 
 	authService := service.NewAuthService(store)
 	orderService := service.NewOrderService(store)

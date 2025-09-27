@@ -26,6 +26,7 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 	ctx, span := tracer.Start(ctx, "CreateOrders")
 	defer span.End()
 	span.SetAttributes(attribute.Int("user.id", userID), attribute.Int("items.count", len(items)))
+	span.SetAttributes(attribute.Int("items.nonEmpty", countPositiveQuantities(items)))
 
 	var insertedOrderIDs []string
 
@@ -45,7 +46,10 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 			}
 		}
 
-		if len(orders) == 0 {
+		orderCount := len(orders)
+		span.SetAttributes(attribute.Int("orders.toInsert", orderCount))
+		if orderCount == 0 {
+			span.AddEvent("no_orders_to_insert")
 			return nil
 		}
 
@@ -63,9 +67,20 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 	}
 	log.Printf("Created %d orders for user %d", len(insertedOrderIDs), userID)
 	if s.planCache != nil {
+		span.AddEvent("flushing_delivery_plan_cache")
 		s.planCache.Flush()
 	}
 	return insertedOrderIDs, nil
+}
+
+func countPositiveQuantities(items []model.RequestItem) int {
+	count := 0
+	for _, item := range items {
+		if item.Quantity > 0 {
+			count++
+		}
+	}
+	return count
 }
 
 func (s *ProductService) FetchProducts(ctx context.Context, userID int, req model.ListRequest) ([]model.Product, int, error) {
