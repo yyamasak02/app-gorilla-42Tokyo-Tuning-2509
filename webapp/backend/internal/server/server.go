@@ -29,10 +29,11 @@ func NewServer() (*Server, *sqlx.DB, error) {
 
 	store := repository.NewStore(dbConn)
 	deliveryCache := cache.New(30*time.Second, 30*time.Second)
+	productCache := cache.New(5*time.Second, 10*time.Second)
 
 	authService := service.NewAuthService(store)
 	orderService := service.NewOrderService(store)
-	productService := service.NewProductService(store, deliveryCache)
+	productService := service.NewProductService(store, deliveryCache, productCache)
 	robotService := service.NewRobotService(store, deliveryCache)
 
 	authHandler := handler.NewAuthHandler(authService)

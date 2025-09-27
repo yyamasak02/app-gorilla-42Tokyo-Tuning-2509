@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"time"
 
 	"backend/internal/model"
 	"backend/internal/repository"
@@ -13,12 +15,13 @@ import (
 )
 
 type ProductService struct {
-	store     *repository.Store
-	planCache *cache.Cache
+	store        *repository.Store
+	planCache    *cache.Cache
+	productCache *cache.Cache
 }
 
-func NewProductService(store *repository.Store, planCache *cache.Cache) *ProductService {
-	return &ProductService{store: store, planCache: planCache}
+func NewProductService(store *repository.Store, planCache *cache.Cache, productCache *cache.Cache) *ProductService {
+	return &ProductService{store: store, planCache: planCache, productCache: productCache}
 }
 
 func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []model.RequestItem) ([]string, error) {
@@ -70,6 +73,9 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 		span.AddEvent("flushing_delivery_plan_cache")
 		s.planCache.Flush()
 	}
+	if s.productCache != nil {
+		s.productCache.Flush()
+	}
 	return insertedOrderIDs, nil
 }
 
@@ -93,9 +99,31 @@ func (s *ProductService) FetchProducts(ctx context.Context, userID int, req mode
 		attribute.Int("pageSize", req.PageSize),
 	)
 
+	cacheKey := fmt.Sprintf("products:u%d:q%s:p%d:ps%d:sf%s:so%s", userID, req.Search, req.Page, req.PageSize, req.SortField, req.SortOrder)
+	if s.productCache != nil {
+		if cached, found := s.productCache.Get(cacheKey); found {
+			if entry, ok := cached.(struct {
+				Products []model.Product
+				Total    int
+			}); ok {
+				span.SetAttributes(attribute.String("cache.hit", "product"))
+				return entry.Products, entry.Total, nil
+			}
+			s.productCache.Delete(cacheKey)
+		}
+	}
+
 	products, total, err := s.store.ProductRepo.ListProducts(ctx, userID, req)
 	if err != nil {
 		span.RecordError(err)
 	}
+
+	if s.productCache != nil && err == nil {
+		s.productCache.Set(cacheKey, struct {
+			Products []model.Product
+			Total    int
+		}{Products: products, Total: total}, 5*time.Second)
+	}
+
 	return products, total, err
 }
