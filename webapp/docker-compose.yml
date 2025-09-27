@@ -116,7 +116,6 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
-      - proxysql-data:/var/lib/proxysql
     networks:
       - webapp-network
     depends_on:
@@ -175,6 +174,3 @@ networks:
   webapp-network:
     name: webapp-network
     external: true
-
-volumes:
-  proxysql-data:

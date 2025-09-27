@@ -106,7 +106,6 @@ services:
     command: ["sh", "-c", "proxysql --config /etc/proxysql.cnf --initial && proxysql -f --config /etc/proxysql.cnf"]
     volumes:
       - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
-      - proxysql-data:/var/lib/proxysql
     networks:
       - webapp-network
     depends_on:
@@ -162,6 +161,3 @@ networks:
   webapp-network:
     name: webapp-network
     external: true
-
-volumes:
-  proxysql-data:
