@@ -92,12 +92,13 @@ func (r *OrderRepository) UpdateStatuses(ctx context.Context, orderIDs []int64, 
 }
 
 // 配送中(shipped_status:shipping)の注文一覧を取得
-func (r *OrderRepository) GetShippingOrders(ctx context.Context) ([]model.DeliveryOrder, error) {
+func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) ([]model.DeliveryOrder, error) {
 	tracer := otel.Tracer("app/custom")
 	ctx, span := tracer.Start(ctx, "GetShippingOrders")
 	defer span.End()
 	span.SetAttributes(
 		attribute.String("zokusei", "GetShippingOrders"),
+		attribute.Int("capacity", capacity),
 	)
 	var orders []model.DeliveryOrder
 	query := `
@@ -108,8 +109,9 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context) ([]model.Delive
         FROM orders o
         JOIN products p ON o.product_id = p.product_id
         WHERE o.shipped_status = 'shipping'
+			AND p.weight <= ?
     `
-	err := r.db.SelectContext(ctx, &orders, query)
+	err := r.db.SelectContext(ctx, &orders, query, capacity)
 	return orders, err
 }
 
