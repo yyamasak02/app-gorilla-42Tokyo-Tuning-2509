@@ -16,7 +16,8 @@ mysql_variables = {
 }
 
 mysql_servers = (
-  { address = "db", port = 3306, hostgroup = 0, max_connections = 200, status = "ONLINE" }
+  { address = "db", port = 3306, hostgroup = 0, max_connections = 200, status = "ONLINE" },
+  { address = "db-replica", port = 3306, hostgroup = 1, max_connections = 200, status = "ONLINE" }
 )
 
 mysql_users = (
@@ -24,6 +25,8 @@ mysql_users = (
 )
 
 mysql_query_rules = (
-  { rule_id = 1, active = 1, match_digest = "^SELECT.*FROM products", cache_ttl = 5000, apply = 1 },
-  { rule_id = 2, active = 1, match_pattern = ".*", destination_hostgroup = 0, apply = 1 }
+  { rule_id = 1, active = 1, match_digest = "^SELECT.*FROM products", destination_hostgroup = 1, cache_ttl = 5000, apply = 1 },
+  { rule_id = 2, active = 1, match_digest = "^SELECT.*FOR UPDATE$", destination_hostgroup = 0, apply = 1 },
+  { rule_id = 3, active = 1, match_digest = "^SELECT", destination_hostgroup = 1, apply = 1 },
+  { rule_id = 4, active = 1, match_pattern = ".*", destination_hostgroup = 0, apply = 1 }
 )
