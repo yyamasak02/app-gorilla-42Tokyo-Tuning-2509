@@ -100,6 +100,7 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 	query := `
 		SELECT
 			o.order_id,
+			o.product_id,
 			p.weight,
 			p.value
 		FROM (
