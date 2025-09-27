@@ -105,11 +105,12 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 			p.value
 		FROM orders o
 		JOIN products p ON o.product_id = p.product_id
-		WHERE o.shipped_status = 'shipping'
-		AND p.weight <= ?
+		WHERE 1= 1
+		AND
+			o.shipped_status = 'shipping'
 		ORDER BY p.value DESC,p.weight ASC,o.order_id ASC;
 	`
-	err := r.db.SelectContext(ctx, &orders, query, capacity)
+	err := r.db.SelectContext(ctx, &orders, query)
 
 	span.SetAttributes(
 		attribute.String("zokusei", "GetShippingOrders"),

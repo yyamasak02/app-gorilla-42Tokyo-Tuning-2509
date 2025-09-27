@@ -6,5 +6,5 @@ CREATE INDEX idx_products_name_pid ON products(name, product_id);
 CREATE INDEX idx_products_value_pid ON products(value, product_id);
 CREATE INDEX idx_products_weight_pid ON products(weight, product_id);
 -- （任意）ORDER BY value DESC, weight ASC をサポートしたい場合の例
-CREATE INDEX idx_products_value_weight_pid
-	ON products (value DESC, weight, product_id);
+CREATE INDEX idx_products_value_desc_weight_asc
+	ON products (value DESC, weight ASC, product_id ASC);

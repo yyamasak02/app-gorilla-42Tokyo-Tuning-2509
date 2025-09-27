@@ -9,3 +9,4 @@ CREATE INDEX idx_created_at_order_pid ON orders(created_at, order_id);
 CREATE INDEX idx_shipped_order_pid ON orders(shipped_status, order_id);
 CREATE INDEX idx_arrived_order_pid ON orders(arrived_at, order_id);
 CREATE INDEX idx_user_id_pid ON orders(user_id);
+CREATE INDEX idx_order_id_pid ON orders(order_id);
