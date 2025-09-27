@@ -3,6 +3,8 @@ package repository
 import (
 	"backend/internal/model"
 	"context"
+	"fmt"
+	"strings"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -33,11 +35,10 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
     `
 	args := []interface{}{}
 	whereClause := ""
-
 	if req.Search != "" {
-		whereClause = " WHERE (name LIKE ? OR description LIKE ?)"
-		searchPattern := "%" + req.Search + "%"
-		args = append(args, searchPattern, searchPattern)
+		phrase := strings.ReplaceAll(req.Search, "\"", "\\\"")
+		whereClause = " WHERE MATCH(name, description) AGAINST (? IN BOOLEAN MODE)"
+		args = append(args, fmt.Sprintf("\"%s\"", phrase))
 	}
 
 	// 安全なソートフィールドと順序をバリデーション
