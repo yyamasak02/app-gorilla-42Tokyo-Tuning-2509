@@ -4,6 +4,7 @@ services:
   # ----------------------------------------------------
   backend:
     container_name: tuning-backend
+    restart: unless-stopped
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -136,6 +137,7 @@ services:
   nginx:
     container_name: tuning-nginx
     image: 42tokyo2508.azurecr.io/nginx:latest
+    restart: unless-stopped
     environment:
       TZ: Asia/Tokyo
     ports:
