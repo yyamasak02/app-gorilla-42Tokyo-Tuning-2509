@@ -21,5 +21,8 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- プロシージャ呼び出し
 CALL BatchUpdateOrdersName();
-DROP PROCEDURE BatchUpdateOrdersName();
+
+-- 使い終わったら削除
+DROP PROCEDURE BatchUpdateOrdersName;
