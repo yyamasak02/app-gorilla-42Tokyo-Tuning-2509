@@ -31,7 +31,7 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 		args = append(args, searchPattern, searchPattern)
 	}
 
-	// 安全なソートフィールドと順序をバリデーション（※これ重要）
+	// 安全なソートフィールドと順序をバリデーション
 	sortField := req.SortField
 	sortOrder := req.SortOrder
 	if sortField != "value" && sortField != "weight" && sortField != "name" {

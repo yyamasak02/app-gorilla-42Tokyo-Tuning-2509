@@ -18,6 +18,42 @@ func NewOrderRepository(db DBTX) *OrderRepository {
 	return &OrderRepository{db: db}
 }
 
+// bulk insert
+func (r *OrderRepository) CreateBulk(ctx context.Context, orders []*model.Order) ([]string, error) {
+	if len(orders) == 0 {
+		return nil, nil
+	}
+
+	placeholders := make([]string, len(orders))
+	vals := make([]interface{}, 0, len(orders)*2)
+
+	for i, o := range orders {
+		placeholders[i] = "(?, ?, 'shipping', NOW())"
+		vals = append(vals, o.UserID, o.ProductID)
+	}
+
+	query := "INSERT INTO orders (user_id, product_id, shipped_status, created_at) VALUES " +
+		strings.Join(placeholders, ",")
+
+	result, err := r.db.ExecContext(ctx, query, vals...)
+	if err != nil {
+		return nil, err
+	}
+
+	// AUTO_INCREMENT の最初の ID を取得
+	firstID, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]string, len(orders))
+	for i := range orders {
+		ids[i] = fmt.Sprintf("%d", firstID+int64(i))
+	}
+
+	return ids, nil
+}
+
 // 注文を作成し、生成された注文IDを返す
 func (r *OrderRepository) Create(ctx context.Context, order *model.Order) (string, error) {
 	query := `INSERT INTO orders (user_id, product_id, shipped_status, created_at) VALUES (?, ?, 'shipping', NOW())`
