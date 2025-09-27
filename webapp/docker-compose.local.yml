@@ -77,12 +77,48 @@ services:
       - "13306:3306"
     volumes:
       - ./mysql/init/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql/migration:/etc/mysql/migration
       - ./mysql/local_data:/var/lib/mysql
       - ./mysql/init/restoreSQL:/docker-entrypoint-initdb.d/init/restoreSQL
     networks:
       - webapp-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "127.0.0.1",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 30s
+      retries: 10
+      start_period: 1500s
+
+  db-replica:
+    container_name: tuning-mysql-replica
+    image: 42tokyo2508.azurecr.io/mysql:base
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: 42Tokyo2508-db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql/init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/conf.d/replica.cnf:/etc/mysql/conf.d/replica.cnf
+      - ./mysql/migration:/etc/mysql/migration
+      - ./mysql/local_data_replica:/var/lib/mysql
+      - ./mysql/init/restoreSQL:/docker-entrypoint-initdb.d/init/restoreSQL
+    networks:
+      - webapp-network
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test:
         [
