@@ -13,11 +13,10 @@ func NewProductRepository(db DBTX) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
-// 商品一覧を全件取得し、アプリケーション側でページング処理を行う
+// 商品一覧をページング付きで取得し、総件数も返す
 func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req model.ListRequest) ([]model.Product, int, error) {
 	var products []model.Product
 
-	// 1. データ取得クエリ（LIMIT + OFFSET）
 	baseQuery := `
 		SELECT product_id, name, value, weight, image, description
 		FROM products
@@ -47,19 +46,27 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 
 	query := baseQuery + whereClause + orderClause + limitOffset
 
-	err := r.db.SelectContext(ctx, &products, query, args...)
-	if err != nil {
+	// データ取得
+	if err := r.db.SelectContext(ctx, &products, query, args...); err != nil {
 		return nil, 0, err
 	}
 
-	// 2. 総件数の取得（COUNT）
-	var total int
-	countQuery := "SELECT COUNT(*) FROM products" + whereClause
-	countArgs := args[:len(args)-2] // LIMIT/OFFSETは外す
-	err = r.db.GetContext(ctx, &total, countQuery, countArgs...)
+	// 総件数取得は共通関数を利用
+	countArgs := args[:len(args)-2] // LIMIT, OFFSET を除外
+	total, err := r.CountProducts(ctx, whereClause, countArgs)
 	if err != nil {
 		return nil, 0, err
 	}
 
 	return products, total, nil
+}
+
+// 総件数だけを取得する共通メソッド
+func (r *ProductRepository) CountProducts(ctx context.Context, whereClause string, countArgs []interface{}) (int, error) {
+	var total int
+	countQuery := "SELECT COUNT(*) FROM products" + whereClause
+	if err := r.db.GetContext(ctx, &total, countQuery, countArgs...); err != nil {
+		return 0, err
+	}
+	return total, nil
 }
