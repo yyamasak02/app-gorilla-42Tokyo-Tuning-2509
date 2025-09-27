@@ -3,7 +3,6 @@ package repository
 import (
 	"backend/internal/model"
 	"context"
-	"fmt"
 	"strings"
 
 	"go.opentelemetry.io/otel"
@@ -29,16 +28,17 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	var total int
 
 	// クエリ共通部分
-	baseQuery := `
-        SELECT product_id, name, value, weight, image, description
-        FROM products
-    `
+	baseQuery := "SELECT product_id, name, value, weight, image, description FROM products"
+	countQuery := "SELECT COUNT(*) FROM products"
 	args := []interface{}{}
-	whereClause := ""
+	countArgs := []interface{}{}
 	if req.Search != "" {
-		phrase := strings.ReplaceAll(req.Search, "\"", "\\\"")
-		whereClause = " WHERE MATCH(name, description) AGAINST (? IN BOOLEAN MODE)"
-		args = append(args, fmt.Sprintf("\"%s\"", phrase))
+		searchPattern := "%" + strings.TrimSpace(req.Search) + "%"
+		clause := " WHERE (name LIKE ? OR description LIKE ?)"
+		baseQuery += clause
+		countQuery += clause
+		args = append(args, searchPattern, searchPattern)
+		countArgs = append(countArgs, searchPattern, searchPattern)
 	}
 
 	// 安全なソートフィールドと順序をバリデーション
@@ -54,18 +54,16 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	orderClause := " ORDER BY " + sortField + " " + sortOrder + ", product_id ASC"
 	limitOffset := " LIMIT ? OFFSET ?"
 	dataArgs := append(append([]interface{}{}, args...), req.PageSize, req.Offset)
-	countArgs := args // LIMIT/OFFSETなし
 
 	// 並列実行
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
-		query := baseQuery + whereClause + orderClause + limitOffset
+		query := baseQuery + orderClause + limitOffset
 		return r.db.SelectContext(ctx, &products, query, dataArgs...)
 	})
 
 	g.Go(func() error {
-		countQuery := "SELECT COUNT(*) FROM products" + whereClause
 		return r.db.GetContext(ctx, &total, countQuery, countArgs...)
 	})
 
@@ -78,7 +76,6 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 		attribute.String("SortOrder", sortOrder),
 		attribute.Int("ReturnedCount", len(products)),
 		attribute.Int("TotalCount", total),
-		attribute.String("WhereClause", whereClause),
 	)
 
 	return products, total, nil

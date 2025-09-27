@@ -52,6 +52,7 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 			if err != nil {
 				return err
 			}
+			span.SetAttributes(attribute.Int("orders.shipping.count", len(orders)))
 			plan, err = selectOrdersForDelivery(ctx, orders, robotID, capacity)
 			if err != nil {
 				return err
@@ -72,6 +73,10 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if len(plan.Orders) == 0 {
+		span.AddEvent("delivery_plan_empty")
 	}
 
 	if s.planCache != nil {
@@ -111,6 +116,7 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 	span.SetAttributes(
 		attribute.String("robot.id", robotID),
 	)
+	span.SetAttributes(attribute.Int("orders.input.count", len(orders)))
 
 	type aggregatedItem struct {
 		weight int
@@ -253,6 +259,7 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 	selectedIndexes := keepTrack[maxIndex]
 	selectedOrders := make([]model.Order, 0, len(selectedIndexes))
 	totalWeight := 0
+	span.SetAttributes(attribute.Int("aggregated.items", len(aggregated)))
 	for _, idx := range selectedIndexes {
 		aggregatedItem := aggregated[idx]
 		for _, order := range aggregatedItem.orders {
@@ -265,6 +272,11 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 			totalWeight += order.Weight
 		}
 	}
+	span.SetAttributes(
+		attribute.Int("plan.orders.count", len(selectedOrders)),
+		attribute.Int("plan.totalWeight", totalWeight),
+		attribute.Int("plan.totalValue", maxValue),
+	)
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
