@@ -6,6 +6,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"golang.org/x/sync/errgroup"
 )
 
 type ProductRepository struct {
@@ -21,12 +22,15 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	tracer := otel.Tracer("app/custom")
 	ctx, span := tracer.Start(ctx, "ListProducts")
 	defer span.End()
-	var products []model.Product
 
+	var products []model.Product
+	var total int
+
+	// クエリ共通部分
 	baseQuery := `
-		SELECT product_id, name, value, weight, image, description
-		FROM products
-	`
+        SELECT product_id, name, value, weight, image, description
+        FROM products
+    `
 	args := []interface{}{}
 	whereClause := ""
 
@@ -48,19 +52,23 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 
 	orderClause := " ORDER BY " + sortField + " " + sortOrder + ", product_id ASC"
 	limitOffset := " LIMIT ? OFFSET ?"
-	args = append(args, req.PageSize, req.Offset)
+	dataArgs := append(append([]interface{}{}, args...), req.PageSize, req.Offset)
+	countArgs := args // LIMIT/OFFSETなし
 
-	query := baseQuery + whereClause + orderClause + limitOffset
+	// 並列実行
+	g, ctx := errgroup.WithContext(ctx)
 
-	// データ取得
-	if err := r.db.SelectContext(ctx, &products, query, args...); err != nil {
-		return nil, 0, err
-	}
+	g.Go(func() error {
+		query := baseQuery + whereClause + orderClause + limitOffset
+		return r.db.SelectContext(ctx, &products, query, dataArgs...)
+	})
 
-	// 総件数取得は共通関数を利用
-	countArgs := args[:len(args)-2] // LIMIT, OFFSET を除外
-	total, err := r.CountProducts(ctx, whereClause, countArgs)
-	if err != nil {
+	g.Go(func() error {
+		countQuery := "SELECT COUNT(*) FROM products" + whereClause
+		return r.db.GetContext(ctx, &total, countQuery, countArgs...)
+	})
+
+	if err := g.Wait(); err != nil {
 		return nil, 0, err
 	}
 
