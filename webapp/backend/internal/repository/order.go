@@ -134,21 +134,30 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 	var rows []orderRow
 
 	baseQuery := `
-		SELECT o.order_id, o.product_id, p.name AS product_name,
-		       o.shipped_status, o.created_at, o.arrived_at
-		FROM orders o
-		JOIN products p ON o.product_id = p.product_id
-		WHERE o.user_id = ?
+		SELECT 
+			o.order_id, 
+			o.product_id, 
+			p.name AS product_name,
+		    o.shipped_status,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		JOIN 
+			products p 
+			ON 
+				o.product_id = p.product_id
+		WHERE 1 = 1
+		AND o.user_id = ?
 	`
 	args := []interface{}{userID}
 	whereClause := ""
 
 	if req.Search != "" {
+		whereClause = " AND p.name LIKE ?"
 		if req.Type == "prefix" {
-			whereClause = " AND p.name LIKE ?"
 			args = append(args, req.Search+"%")
 		} else {
-			whereClause = " AND p.name LIKE ?"
 			args = append(args, "%"+req.Search+"%")
 		}
 	}
@@ -187,7 +196,18 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 
 	// 総件数取得
 	var total int
-	countQuery := "SELECT COUNT(*) FROM orders o JOIN products p ON o.product_id = p.product_id WHERE o.user_id = ?" + whereClause
+	countQuery := `
+		SELECT 
+			COUNT(*) 
+		FROM 
+			orders o 
+			JOIN 
+				products p 
+			ON 
+				o.product_id = p.product_id 
+		WHERE 1=1
+		AND	o.user_id = ?
+	` + whereClause
 	countArgs := args[:len(args)-2] // LIMIT/OFFSETを除外
 	if err := r.db.GetContext(ctx, &total, countQuery, countArgs...); err != nil {
 		return nil, 0, err
