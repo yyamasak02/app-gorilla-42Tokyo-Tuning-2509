@@ -91,12 +91,12 @@ func (r *OrderRepository) UpdateStatuses(ctx context.Context, orderIDs []int64, 
 	return err
 }
 
-func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) ([]model.DeliveryOrder, error) {
+func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) ([]model.Order, error) {
 	tracer := otel.Tracer("app/custom")
 	ctx, span := tracer.Start(ctx, "GetShippingOrders")
 	defer span.End()
 
-	var orders []model.DeliveryOrder
+	var orders []model.Order
 	query := `
 		SELECT
 			o.order_id,
@@ -111,32 +111,13 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 	`
 	err := r.db.SelectContext(ctx, &orders, query, capacity)
 
-	// shipping 商品種類数を算出
-	shippingProductCount, countErr := r.countShippingProductTypes(ctx)
-	if countErr != nil {
-		span.RecordError(countErr)
-	}
-
 	span.SetAttributes(
 		attribute.String("zokusei", "GetShippingOrders"),
 		attribute.Int("capacity", capacity),
 		attribute.Int("orders.length", len(orders)),
-		attribute.Int("shipping.product.types", shippingProductCount),
 	)
 
 	return orders, err
-}
-
-// shipping 状態の商品種類数を算出する関数
-func (r *OrderRepository) countShippingProductTypes(ctx context.Context) (int, error) {
-	var count int
-	query := `
-		SELECT COUNT(DISTINCT product_id)
-		FROM orders
-		WHERE shipped_status = 'shipping'
-	`
-	err := r.db.GetContext(ctx, &count, query)
-	return count, err
 }
 
 // 注文履歴一覧を取得
