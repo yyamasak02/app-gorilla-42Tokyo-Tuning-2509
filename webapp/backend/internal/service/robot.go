@@ -76,6 +76,7 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	}
 
 	if len(plan.Orders) == 0 {
+		span.SetAttributes(attribute.Bool("delivery_plan.empty", true))
 		span.AddEvent("delivery_plan_empty")
 	}
 
