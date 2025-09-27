@@ -32,13 +32,6 @@ type Order struct {
 	ArrivedAt     sql.NullTime `db:"arrived_at"      json:"arrived_at"`
 }
 
-type DeliveryOrder struct {
-	OrderID   int64 `db:"order_id"`
-	ProductID int   `db:"product_id"`
-	Weight    int   `db:"weight"`
-	Value     int   `db:"value"`
-}
-
 type DeliveryPlan struct {
 	RobotID     string  `json:"robot_id"`
 	TotalWeight int     `json:"total_weight"`
