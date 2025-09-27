@@ -4,13 +4,14 @@ services:
   # ----------------------------------------------------
   backend:
     container_name: tuning-backend
+    restart: unless-stopped
     build:
       context: ./backend
       dockerfile: Dockerfile
       target: production
     environment:
       TZ: Asia/Tokyo
-      DATABASE_URL: user:password@tcp(db:3306)/42Tokyo2508-db
+      DATABASE_URL: user:password@tcp(proxysql:6033)/42Tokyo2508-db
       TRACE_ENABLED: "true" # いらない時はfalse
       JAEGER_ENDPOINT: "http://jaeger:14268/api/traces"
       TRACE_SAMPLE_RATIO: "1.0"
@@ -23,7 +24,7 @@ services:
     networks:
       - webapp-network
     depends_on:
-      db:
+      proxysql:
         condition: service_healthy
     healthcheck:
       test:
@@ -106,12 +107,38 @@ services:
       timeout: 30s
       retries: 10
       start_period: 1000s
+
+  proxysql:
+    container_name: tuning-proxysql
+    image: proxysql/proxysql:2.6.2
+    # 起動時に古い /var/lib/proxysql/proxysql.db を削除して新規作成
+    command: >
+      sh -c "rm -f /var/lib/proxysql/proxysql.db &&
+             exec proxysql -f --config /etc/proxysql.cnf"
+    volumes:
+      - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
+    networks:
+      - webapp-network
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-h", "127.0.0.1", "-P", "6033", "-u", "user", "-ppassword", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    ports:
+      - "16033:6033"
+      - "16032:6032"
+
   # ----------------------------------------------------
   # Nginx サービス: リバースプロキシと静的ファイル配信
   # ----------------------------------------------------
   nginx:
     container_name: tuning-nginx
     image: 42tokyo2508.azurecr.io/nginx:latest
+    restart: unless-stopped
     environment:
       TZ: Asia/Tokyo
     ports:
