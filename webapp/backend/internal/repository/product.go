@@ -29,14 +29,13 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 
 	// クエリ共通部分
 	baseQuery := "SELECT product_id, name, value, weight, image, description FROM products"
-	countQuery := "SELECT COUNT(*) FROM products"
 	args := []interface{}{}
 	countArgs := []interface{}{}
+	whereClause := ""
 	if req.Search != "" {
 		searchPattern := "%" + strings.TrimSpace(req.Search) + "%"
-		clause := " WHERE (name LIKE ? OR description LIKE ?)"
-		baseQuery += clause
-		countQuery += clause
+		whereClause = " WHERE (name LIKE ? OR description LIKE ?)"
+		baseQuery += whereClause
 		args = append(args, searchPattern, searchPattern)
 		countArgs = append(countArgs, searchPattern, searchPattern)
 	}
@@ -64,7 +63,12 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	})
 
 	g.Go(func() error {
-		return r.db.GetContext(ctx, &total, countQuery, countArgs...)
+		cnt, err := r.CountProducts(ctx, whereClause, countArgs)
+		if err != nil {
+			return err
+		}
+		total = cnt
+		return nil
 	})
 
 	if err := g.Wait(); err != nil {
@@ -83,10 +87,15 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 
 // 総件数だけを取得する共通メソッド
 func (r *ProductRepository) CountProducts(ctx context.Context, whereClause string, countArgs []interface{}) (int, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "CountProducts")
+	defer span.End()
 	var total int
 	countQuery := "SELECT COUNT(*) FROM products" + whereClause
 	if err := r.db.GetContext(ctx, &total, countQuery, countArgs...); err != nil {
+		span.RecordError(err)
 		return 0, err
 	}
+	span.SetAttributes(attribute.Int("products.count", total))
 	return total, nil
 }
