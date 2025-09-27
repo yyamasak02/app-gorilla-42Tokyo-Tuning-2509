@@ -1,0 +1,16 @@
+./commenter.go
+./config.go
+./conn.go
+./connector.go
+./doc.go
+./driver.go
+./helpers.go
+./instruments.go
+./methods.go
+./option.go
+./rows.go
+./sql.go
+./stmt.go
+./tx.go
+./utils.go
+./version.go

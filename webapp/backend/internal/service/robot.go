@@ -12,11 +12,12 @@ import (
 )
 
 type RobotService struct {
-	store *repository.Store
+	store     *repository.Store
+	planCache *DeliveryPlanCache
 }
 
-func NewRobotService(store *repository.Store) *RobotService {
-	return &RobotService{store: store}
+func NewRobotService(store *repository.Store, cache *DeliveryPlanCache) *RobotService {
+	return &RobotService{store: store, planCache: cache}
 }
 
 func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string, capacity int) (*model.DeliveryPlan, error) {
@@ -28,6 +29,14 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 		attribute.String("robot.id", robotID),
 		attribute.Int("capacity", capacity),
 	)
+	if s.planCache != nil {
+		if cached, ok := s.planCache.Get(robotID, capacity); ok {
+			span.SetAttributes(attribute.Bool("cache.hit", true))
+			return cached, nil
+		}
+	}
+
+	span.SetAttributes(attribute.Bool("cache.hit", false))
 	var plan model.DeliveryPlan
 
 	err := utils.WithTimeout(ctx, func(ctx context.Context) error {
@@ -36,7 +45,12 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 			if err != nil {
 				return err
 			}
-			plan, err = selectOrdersForDelivery(ctx, orders, robotID, capacity)
+			items := buildKnapsackItems(orders, capacity)
+			span.SetAttributes(
+				attribute.Int("orders.raw", len(orders)),
+				attribute.Int("orders.items", len(items)),
+			)
+			plan, err = selectOrdersForDelivery(ctx, items, robotID, capacity)
 			if err != nil {
 				return err
 			}
@@ -57,16 +71,24 @@ func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string,
 	if err != nil {
 		return nil, err
 	}
+	if s.planCache != nil {
+		s.planCache.Set(robotID, capacity, plan)
+	}
 	return &plan, nil
 }
 
 func (s *RobotService) UpdateOrderStatus(ctx context.Context, orderID int64, newStatus string) error {
-	return utils.WithTimeout(ctx, func(ctx context.Context) error {
+	err := utils.WithTimeout(ctx, func(ctx context.Context) error {
 		return s.store.OrderRepo.UpdateStatuses(ctx, []int64{orderID}, newStatus)
 	})
+	if err == nil && s.planCache != nil {
+		// Delivery completion or status change means plans should be recomputed.
+		s.planCache.InvalidateAll()
+	}
+	return err
 }
 
-func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
+func selectOrdersForDelivery(ctx context.Context, items []knapsackItem, robotID string, robotCapacity int) (model.DeliveryPlan, error) {
 	tracer := otel.Tracer("app/custom")
 	ctx, span := tracer.Start(ctx, "selectOrdersForDelivery")
 	defer span.End()
@@ -82,8 +104,8 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 	steps := 0
 	checkEvery := 16384
 
-	for i, order := range orders {
-		for w := robotCapacity; w >= order.Weight; w-- {
+	for i, item := range items {
+		for w := robotCapacity; w >= item.Weight; w-- {
 			steps++
 			if checkEvery > 0 && steps%checkEvery == 0 {
 				select {
@@ -93,12 +115,12 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 				}
 			}
 
-			if dp[w-order.Weight]+order.Value > dp[w] {
-				dp[w] = dp[w-order.Weight] + order.Value
+			if dp[w-item.Weight]+item.Value > dp[w] {
+				dp[w] = dp[w-item.Weight] + item.Value
 
 				// 選んだ注文の更新（新規コピーにして追加）
-				newSet := make([]int, len(keepTrack[w-order.Weight]))
-				copy(newSet, keepTrack[w-order.Weight])
+				newSet := make([]int, len(keepTrack[w-item.Weight]))
+				copy(newSet, keepTrack[w-item.Weight])
 				newSet = append(newSet, i)
 				keepTrack[w] = newSet
 			}
@@ -117,17 +139,19 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.DeliveryOrder, 
 
 	// 注文を復元 & DeliveryOrder → Order に変換
 	selectedIndexes := keepTrack[maxIndex]
-	selectedOrders := make([]model.Order, len(selectedIndexes))
+	selectedOrders := make([]model.Order, 0)
 	totalWeight := 0
-	for i, idx := range selectedIndexes {
-		d := orders[idx] // DeliveryOrder
-		selectedOrders[i] = model.Order{
-			OrderID: d.OrderID,
-			Weight:  d.Weight,
-			Value:   d.Value,
-			// 他のフィールドは未取得なのでゼロ値/NULLのまま
+	for _, idx := range selectedIndexes {
+		chunk := items[idx]
+		for _, d := range chunk.Orders {
+			selectedOrders = append(selectedOrders, model.Order{
+				OrderID: d.OrderID,
+				Weight:  d.Weight,
+				Value:   d.Value,
+				// 他のフィールドは未取得なのでゼロ値/NULLのまま
+			})
+			totalWeight += d.Weight
 		}
-		totalWeight += d.Weight
 	}
 
 	return model.DeliveryPlan{

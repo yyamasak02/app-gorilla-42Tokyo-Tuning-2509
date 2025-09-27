@@ -12,11 +12,12 @@ import (
 )
 
 type ProductService struct {
-	store *repository.Store
+	store     *repository.Store
+	planCache *DeliveryPlanCache
 }
 
-func NewProductService(store *repository.Store) *ProductService {
-	return &ProductService{store: store}
+func NewProductService(store *repository.Store, cache *DeliveryPlanCache) *ProductService {
+	return &ProductService{store: store, planCache: cache}
 }
 
 func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []model.RequestItem) ([]string, error) {
@@ -58,6 +59,9 @@ func (s *ProductService) CreateOrders(ctx context.Context, userID int, items []m
 
 	if err != nil {
 		return nil, err
+	}
+	if s.planCache != nil {
+		s.planCache.InvalidateAll()
 	}
 	log.Printf("Created %d orders for user %d", len(insertedOrderIDs), userID)
 	return insertedOrderIDs, nil

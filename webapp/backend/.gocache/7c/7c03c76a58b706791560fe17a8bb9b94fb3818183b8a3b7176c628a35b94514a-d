@@ -1,0 +1,4 @@
+./auth.go
+./order.go
+./product.go
+./robot.go

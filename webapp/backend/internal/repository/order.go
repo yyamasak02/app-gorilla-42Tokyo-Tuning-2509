@@ -98,22 +98,26 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 
 	var orders []model.DeliveryOrder
 	query := `
+		WITH shipping AS (
+			SELECT
+				o.order_id,
+				o.product_id,
+				ROW_NUMBER() OVER (PARTITION BY o.product_id ORDER BY o.order_id) AS rn
+			FROM orders o
+			WHERE o.shipped_status = 'shipping'
+		)
 		SELECT
-			o.order_id,
+			s.order_id,
+			s.product_id,
 			p.weight,
 			p.value
-		FROM (
-			SELECT order_id, product_id
-			FROM orders
-			WHERE shipped_status = 'shipping'
-		) o
-		JOIN (
-			SELECT product_id, weight, value
-			FROM products
-			WHERE weight <= ?
-		) p ON o.product_id = p.product_id;
+		FROM shipping s
+		JOIN products p ON p.product_id = s.product_id
+		WHERE p.weight <= ?
+			AND s.rn <= GREATEST(1, FLOOR(? / p.weight))
+		ORDER BY s.order_id;
 	`
-	err := r.db.SelectContext(ctx, &orders, query, capacity)
+	err := r.db.SelectContext(ctx, &orders, query, capacity, capacity)
 
 	// shipping 商品種類数を算出
 	shippingProductCount, countErr := r.countShippingProductTypes(ctx)
