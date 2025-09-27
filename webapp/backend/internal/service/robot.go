@@ -6,6 +6,7 @@ import (
 	"backend/internal/service/utils"
 	"context"
 	"log"
+	"sort"
 	"strconv"
 
 	"github.com/patrickmn/go-cache"
@@ -118,95 +119,169 @@ func selectOrdersForDelivery(ctx context.Context, orders []model.Order, robotID 
 	)
 	span.SetAttributes(attribute.Int("orders.input.count", len(orders)))
 
-	trimmed := make([]model.Order, len(orders))
-	for i, o := range orders {
-		trimmed[i] = model.Order{OrderID: o.OrderID, Weight: o.Weight, Value: o.Value}
-	}
-
-	type memoKey struct {
-		idx int
-		cap int
-	}
-
-	type memoEntry struct {
+	type aggregatedItem struct {
+		weight int
 		value  int
 		orders []model.Order
 	}
 
-	memo := make(map[memoKey]memoEntry)
+	grouped := make(map[int][]model.Order)
+	for _, order := range orders {
+		grouped[order.ProductID] = append(grouped[order.ProductID], order)
+	}
+
+	productIDs := make([]int, 0, len(grouped))
+	for productID := range grouped {
+		productIDs = append(productIDs, productID)
+	}
+	sort.Ints(productIDs)
+
+	aggregated := make([]aggregatedItem, 0, len(orders))
+	for _, productID := range productIDs {
+		productOrders := grouped[productID]
+		sort.Slice(productOrders, func(i, j int) bool {
+			return productOrders[i].OrderID < productOrders[j].OrderID
+		})
+
+		if len(productOrders) == 0 {
+			continue
+		}
+
+		unitWeight := productOrders[0].Weight
+		if unitWeight <= 0 {
+			for _, o := range productOrders {
+				aggregated = append(aggregated, aggregatedItem{
+					weight: o.Weight,
+					value:  o.Value,
+					orders: []model.Order{{OrderID: o.OrderID, Weight: o.Weight, Value: o.Value}},
+				})
+			}
+			continue
+		}
+		maxChunkByCapacity := robotCapacity / unitWeight
+		if maxChunkByCapacity == 0 {
+			// 1 件でも積めない重量ならスキップ
+			continue
+		}
+
+		remaining := len(productOrders)
+		index := 0
+		chunkSize := 1
+		for remaining > 0 {
+			actualChunk := chunkSize
+			if actualChunk > remaining {
+				actualChunk = remaining
+			}
+			if actualChunk > maxChunkByCapacity {
+				actualChunk = maxChunkByCapacity
+			}
+			if actualChunk == 0 {
+				break
+			}
+
+			ordersChunk := make([]model.Order, actualChunk)
+			weight := 0
+			value := 0
+			for i := 0; i < actualChunk; i++ {
+				src := productOrders[index+i]
+				ordersChunk[i] = model.Order{OrderID: src.OrderID, Weight: src.Weight, Value: src.Value}
+				weight += src.Weight
+				value += src.Value
+			}
+
+			aggregated = append(aggregated, aggregatedItem{
+				weight: weight,
+				value:  value,
+				orders: ordersChunk,
+			})
+
+			index += actualChunk
+			remaining -= actualChunk
+			if remaining == 0 {
+				break
+			}
+
+			if chunkSize < remaining {
+				nextSize := chunkSize * 2
+				if nextSize > maxChunkByCapacity {
+					nextSize = maxChunkByCapacity
+				}
+				if nextSize == 0 {
+					nextSize = 1
+				}
+				chunkSize = nextSize
+			}
+		}
+	}
+
+	// dp[w]: 容量wまでで得られる最大価値
+	dp := make([]int, robotCapacity+1)
+
+	// 選んだ注文のインデックスを保持するスライスのスライス
+	keepTrack := make([][]int, robotCapacity+1)
+
 	steps := 0
 	checkEvery := 16384
 
-	var dfs func(int, int) (int, []model.Order, bool)
-	dfs = func(i int, remaining int) (int, []model.Order, bool) {
-		if remaining < 0 {
-			return -1, nil, false
+	for i, item := range aggregated {
+		if item.weight > robotCapacity {
+			continue
 		}
-		steps++
-		if checkEvery > 0 && steps%checkEvery == 0 {
-			select {
-			case <-ctx.Done():
-				return 0, nil, true
-			default:
+		for w := robotCapacity; w >= item.weight; w-- {
+			steps++
+			if checkEvery > 0 && steps%checkEvery == 0 {
+				select {
+				case <-ctx.Done():
+					return model.DeliveryPlan{}, ctx.Err()
+				default:
+				}
+			}
+
+			if dp[w-item.weight]+item.value > dp[w] {
+				dp[w] = dp[w-item.weight] + item.value
+
+				newSet := make([]int, len(keepTrack[w-item.weight]))
+				copy(newSet, keepTrack[w-item.weight])
+				newSet = append(newSet, i)
+				keepTrack[w] = newSet
 			}
 		}
-
-		if i == len(trimmed) {
-			return 0, nil, false
-		}
-
-		key := memoKey{idx: i, cap: remaining}
-		if entry, ok := memo[key]; ok {
-			return entry.value, append([]model.Order(nil), entry.orders...), false
-		}
-
-		bestValue := 0
-		bestOrders := []model.Order{}
-
-		skipValue, skipOrders, canceled := dfs(i+1, remaining)
-		if canceled {
-			return 0, nil, true
-		}
-		bestValue = skipValue
-		bestOrders = append(bestOrders, skipOrders...)
-
-		order := trimmed[i]
-		if order.Weight <= remaining {
-			takeValue, takeOrders, canceled := dfs(i+1, remaining-order.Weight)
-			if canceled {
-				return 0, nil, true
-			}
-			takeValue += order.Value
-			if takeValue > bestValue {
-				bestValue = takeValue
-				bestOrders = append([]model.Order{order}, takeOrders...)
-			}
-		}
-
-		memo[key] = memoEntry{value: bestValue, orders: append([]model.Order(nil), bestOrders...)}
-		return bestValue, append([]model.Order(nil), bestOrders...), false
 	}
 
-	bestValue, bestOrders, canceled := dfs(0, robotCapacity)
-	if canceled {
-		return model.DeliveryPlan{}, ctx.Err()
+	// 最大価値と対応する注文セットを特定
+	maxValue := 0
+	maxIndex := 0
+	for w, val := range dp {
+		if val > maxValue {
+			maxValue = val
+			maxIndex = w
+		}
 	}
 
-	var totalWeight int
-	for _, o := range bestOrders {
-		totalWeight += o.Weight
+	// 注文を復元
+	selectedIndexes := keepTrack[maxIndex]
+	selectedOrders := make([]model.Order, 0, len(selectedIndexes))
+	totalWeight := 0
+	span.SetAttributes(attribute.Int("aggregated.items", len(aggregated)))
+	for _, idx := range selectedIndexes {
+		aggregatedItem := aggregated[idx]
+		selectedOrders = append(selectedOrders, aggregatedItem.orders...)
+		for _, order := range aggregatedItem.orders {
+			totalWeight += order.Weight
+		}
 	}
 
 	span.SetAttributes(
-		attribute.Int("plan.orders.count", len(bestOrders)),
+		attribute.Int("plan.orders.count", len(selectedOrders)),
 		attribute.Int("plan.totalWeight", totalWeight),
-		attribute.Int("plan.totalValue", bestValue),
+		attribute.Int("plan.totalValue", maxValue),
+		attribute.Bool("plan.empty", len(selectedOrders) == 0),
 	)
 
 	return model.DeliveryPlan{
 		RobotID:     robotID,
 		TotalWeight: totalWeight,
-		TotalValue:  bestValue,
-		Orders:      bestOrders,
+		TotalValue:  maxValue,
+		Orders:      selectedOrders, // []model.Order
 	}, nil
 }
