@@ -35,7 +35,12 @@ func (s *AuthService) Login(ctx context.Context, userName, password string) (str
 	var sessionID string
 	var expiresAt time.Time
 	err := utils.WithTimeout(ctx, func(ctx context.Context) error {
+		// ユーザー検索のタイマー
+		start := time.Now()
 		user, err := s.store.UserRepo.FindByUserName(ctx, userName)
+		userSearchTime := time.Since(start)
+		log.Printf("[Login] ユーザー検索時間: %v", userSearchTime)
+		
 		if err != nil {
 			log.Printf("[Login] ユーザー検索失敗(userName: %s): %v", userName, err)
 			if errors.Is(err, sql.ErrNoRows) {
@@ -44,15 +49,25 @@ func (s *AuthService) Login(ctx context.Context, userName, password string) (str
 			return ErrInternalServer
 		}
 
+		// パスワード検証のタイマー
+		start = time.Now()
 		err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+		passwordVerifyTime := time.Since(start)
+		log.Printf("[Login] パスワード検証時間: %v", passwordVerifyTime)
+		
 		if err != nil {
 			log.Printf("[Login] パスワード検証失敗: %v", err)
 			span.RecordError(err)
 			return ErrInvalidPassword
 		}
 
+		// セッション作成のタイマー
+		start = time.Now()
 		sessionDuration := 24 * time.Hour
 		sessionID, expiresAt, err = s.store.SessionRepo.Create(ctx, user.UserID, sessionDuration)
+		sessionCreateTime := time.Since(start)
+		log.Printf("[Login] セッション作成時間: %v", sessionCreateTime)
+		
 		if err != nil {
 			log.Printf("[Login] セッション生成失敗: %v", err)
 			return ErrInternalServer

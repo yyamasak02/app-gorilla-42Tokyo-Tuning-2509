@@ -5,3 +5,5 @@
 sample/*
 deploy_*.sh
 .memo.md
+debug_*.sh
+test_*.sh
