@@ -6,6 +6,9 @@ import (
 	"backend/internal/service/utils"
 	"context"
 	"log"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 type RobotService struct {
@@ -17,6 +20,14 @@ func NewRobotService(store *repository.Store) *RobotService {
 }
 
 func (s *RobotService) GenerateDeliveryPlan(ctx context.Context, robotID string, capacity int) (*model.DeliveryPlan, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "GetDeliveryPlan")
+	defer span.End()
+	// スパン属性を追加（引数ベース）
+	span.SetAttributes(
+		attribute.String("robot.id", robotID),
+		attribute.Int("capacity", capacity),
+	)
 	var plan model.DeliveryPlan
 
 	err := utils.WithTimeout(ctx, func(ctx context.Context) error {
