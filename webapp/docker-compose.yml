@@ -110,10 +110,11 @@ services:
 
   proxysql:
     container_name: tuning-proxysql
-    image: proxysql/proxysql:latest
-    command: ["sh", "-c", "proxysql --config /etc/proxysql.cnf --initial && proxysql -f --config /etc/proxysql.cnf"]
-    environment:
-      TZ: Asia/Tokyo
+    image: proxysql/proxysql:2.6.2
+    # 起動時に古い /var/lib/proxysql/proxysql.db を削除して新規作成
+    command: >
+      sh -c "rm -f /var/lib/proxysql/proxysql.db &&
+             exec proxysql -f --config /etc/proxysql.cnf"
     volumes:
       - ./proxysql/proxysql.cnf:/etc/proxysql.cnf:ro
     networks:
@@ -121,15 +122,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "36033:6033"
-      - "36032:6032"
     healthcheck:
       test: ["CMD", "mysqladmin", "-h", "127.0.0.1", "-P", "6033", "-u", "user", "-ppassword", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
+    ports:
+      - "16033:6033"
+      - "16032:6032"
+
   # ----------------------------------------------------
   # Nginx サービス: リバースプロキシと静的ファイル配信
   # ----------------------------------------------------
