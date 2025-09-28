@@ -3,6 +3,8 @@ package repository
 import (
 	"backend/internal/model"
 	"context"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type ProductRepository struct {
@@ -47,4 +49,51 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	pagedProducts := products[start:end]
 
 	return pagedProducts, total, nil
+}
+
+func (r *ProductRepository) FetchWeightsAndValues(ctx context.Context, productIDs []int) (map[int]struct{ Weight, Value int }, error) {
+	if len(productIDs) == 0 {
+		return map[int]struct{ Weight, Value int }{}, nil
+	}
+	query, args, err := sqlx.In("SELECT product_id, weight, value FROM products WHERE product_id IN (?)", productIDs)
+	if err != nil {
+		return nil, err
+	}
+	query = r.db.Rebind(query)
+	rows := []struct {
+		ProductID int `db:"product_id"`
+		Weight    int `db:"weight"`
+		Value     int `db:"value"`
+	}{}
+	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+		return nil, err
+	}
+	result := make(map[int]struct{ Weight, Value int }, len(rows))
+	for _, row := range rows {
+		result[row.ProductID] = struct{ Weight, Value int }{Weight: row.Weight, Value: row.Value}
+	}
+	return result, nil
+}
+
+func (r *ProductRepository) FetchProductNames(ctx context.Context, productIDs []int) (map[int]string, error) {
+	query := `SELECT product_id, name FROM products WHERE product_id IN (?)`
+	query, args, err := sqlx.In(query, productIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []struct {
+		ProductID int    `db:"product_id"`
+		Name      string `db:"name"`
+	}
+	err = r.db.SelectContext(ctx, &results, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	m := make(map[int]string, len(results))
+	for _, r := range results {
+		m[r.ProductID] = r.Name
+	}
+	return m, nil
 }
