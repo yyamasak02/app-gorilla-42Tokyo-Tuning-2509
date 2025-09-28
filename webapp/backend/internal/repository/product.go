@@ -34,11 +34,11 @@ func (r *ProductRepository) ListProducts(ctx context.Context, userID int, req mo
 	countArgs := []interface{}{}
 	whereClause := ""
 	if req.Search != "" {
-		searchKeyword := strings.TrimSpace(req.Search)
-		whereClause = " WHERE MATCH(name, description) AGAINST(? IN BOOLEAN MODE)"
+		searchPattern := "%" + strings.TrimSpace(req.Search) + "%"
+		whereClause = " WHERE (name LIKE ? OR description LIKE ?)"
 		baseQuery += whereClause
-		args = append(args, searchKeyword)
-		countArgs = append(countArgs, searchKeyword)
+		args = append(args, searchPattern, searchPattern)
+		countArgs = append(countArgs, searchPattern, searchPattern)
 	}
 
 	// 安全なソートフィールドと順序をバリデーション
