@@ -21,11 +21,19 @@ var (
 )
 
 type AuthService struct {
-	store *repository.Store
+	store             *repository.Store
+	cachedSessionRepo *repository.CachedSessionRepository
 }
 
 func NewAuthService(store *repository.Store) *AuthService {
 	return &AuthService{store: store}
+}
+
+func NewAuthServiceWithCache(store *repository.Store, cachedSessionRepo *repository.CachedSessionRepository) *AuthService {
+	return &AuthService{
+		store:             store,
+		cachedSessionRepo: cachedSessionRepo,
+	}
 }
 
 func (s *AuthService) Login(ctx context.Context, userName, password string) (string, time.Time, error) {
@@ -52,7 +60,12 @@ func (s *AuthService) Login(ctx context.Context, userName, password string) (str
 		}
 
 		sessionDuration := 24 * time.Hour
-		sessionID, expiresAt, err = s.store.SessionRepo.Create(ctx, user.UserID, sessionDuration)
+		// キャッシュ付きセッションリポジトリが利用可能な場合はそれを使用
+		if s.cachedSessionRepo != nil {
+			sessionID, expiresAt, err = s.cachedSessionRepo.Create(ctx, user.UserID, sessionDuration)
+		} else {
+			sessionID, expiresAt, err = s.store.SessionRepo.Create(ctx, user.UserID, sessionDuration)
+		}
 		if err != nil {
 			log.Printf("[Login] セッション生成失敗: %v", err)
 			return ErrInternalServer

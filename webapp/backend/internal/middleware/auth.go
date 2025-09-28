@@ -4,15 +4,13 @@ import (
 	"context"
 	"log"
 	"net/http"
-
-	"backend/internal/repository"
 )
 
 type contextKey string
 
 const userContextKey contextKey = "user"
 
-func UserAuthMiddleware(sessionRepo *repository.SessionRepository) func(http.Handler) http.Handler {
+func UserAuthMiddleware(sessionRepo interface{ FindUserBySessionID(context.Context, string) (int, error) }) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			cookie, err := r.Cookie("session_id")

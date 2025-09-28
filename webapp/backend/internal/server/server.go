@@ -29,8 +29,11 @@ func NewServer() (*Server, *sqlx.DB, error) {
 
 	store := repository.NewStore(dbConn)
 	deliveryCache := cache.New(30*time.Second, 30*time.Second)
+	
+	// セッションキャッシュ付きリポジトリを作成
+	cachedSessionRepo := repository.NewCachedSessionRepository(dbConn)
 
-	authService := service.NewAuthService(store)
+	authService := service.NewAuthServiceWithCache(store, cachedSessionRepo)
 	orderService := service.NewOrderService(store)
 	productService := service.NewProductService(store, deliveryCache)
 	robotService := service.NewRobotService(store, deliveryCache)
@@ -40,7 +43,7 @@ func NewServer() (*Server, *sqlx.DB, error) {
 	orderHandler := handler.NewOrderHandler(orderService)
 	robotHandler := handler.NewRobotHandler(robotService)
 
-	userAuthMW := middleware.UserAuthMiddleware(store.SessionRepo)
+	userAuthMW := middleware.UserAuthMiddleware(cachedSessionRepo)
 
 	robotAPIKey := os.Getenv("ROBOT_API_KEY")
 	if robotAPIKey == "" {
