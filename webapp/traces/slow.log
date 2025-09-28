@@ -1,0 +1,3277 @@
+/usr/sbin/mysqld, Version: 9.4.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Time: 2025-09-27T22:32:10.442174Z
+# User@Host: root[root] @ localhost []  Id:    26
+# Query_time: 0.005357  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 200
+use 42tokyo2508-db;
+SET timestamp=1759012330;
+UPDATE orders o
+JOIN products p ON o.product_id = p.product_id
+SET o.product_weight = p.weight,
+    o.product_value = p.value;
+# Time: 2025-09-27T22:32:10.530685Z
+# User@Host: root[root] @ localhost []  Id:    27
+# Query_time: 0.006134  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 200
+SET timestamp=1759012330;
+UPDATE orders o
+JOIN products p ON o.product_id = p.product_id
+SET o.product_name = p.name;
+# Time: 2025-09-27T22:32:19.644976Z
+# User@Host: user[user] @  [172.18.0.4]  Id:    30
+# Query_time: 0.417333  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 101941
+SET timestamp=1759012339;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%限定抗菌ポーチ%' OR description LIKE '%限定抗菌ポーチ%') /*traceparent='00-bf63a855f050a18233017f0973c7d146-1099b532f92eb9e5-01'*/;
+/usr/sbin/mysqld, Version: 9.4.0 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+# Time: 2025-09-27T22:37:25.610298Z
+# User@Host: root[root] @ localhost []  Id:    55
+# Query_time: 106.288219  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 3000000
+use 42tokyo2508-db;
+SET timestamp=1759012539;
+UPDATE orders o
+JOIN products p ON o.product_id = p.product_id
+SET o.product_weight = p.weight,
+    o.product_value = p.value;
+# Time: 2025-09-27T22:40:12.540634Z
+# User@Host: root[root] @ localhost []  Id:    78
+# Query_time: 166.497435  Lock_time: 0.000003 Rows_sent: 0  Rows_examined: 3000000
+SET timestamp=1759012646;
+UPDATE orders o
+JOIN products p ON o.product_id = p.product_id
+SET o.product_name = p.name;
+# Time: 2025-09-27T22:41:49.303188Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.915432  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012906;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%、ワークスペースで長時間の作業でも快%' OR description LIKE '%、ワークスペースで長時間の作業でも快%') /*traceparent='00-72d8a3fd6658fd2e2df6df15e4861bdc-ed76f349c08c3359-01'*/;
+# Time: 2025-09-27T22:41:53.651381Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 3.240330  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012910;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%し、職場で持ち出しやすい%' OR description LIKE '%し、職場で持ち出しやすい%') /*traceparent='00-83ae886d5732e5f05761d931cd44c441-4de4e83b6e2a2578-01'*/;
+# Time: 2025-09-27T22:41:55.153234Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 9.910425  Lock_time: 0.000001 Rows_sent: 1000000  Rows_examined: 2000000
+SET timestamp=1759012905;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-4cbf19b92e021571f4551f7293926ab0-d1d6aa36d95fb5b0-01'*/;
+# Time: 2025-09-27T22:42:00.179748Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 5.028936  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012915;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ドック型式モエソ-１５%' OR description LIKE '%ドック型式モエソ-１５%') /*traceparent='00-db1bd82967e5be3cae3bc80fd1154fad-5d6b56edd7d35dbf-01'*/;
+# Time: 2025-09-27T22:42:01.790838Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 1.062612  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 1
+SET timestamp=1759012920;
+UPDATE orders SET shipped_status = 'completed' WHERE order_id IN (641776) /*traceparent='00-875f32306481ca11ba97de146c2f6fb8-66aac570983878e2-01'*/;
+# Time: 2025-09-27T22:42:02.349634Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 7.198717  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012915;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ドック型式モエソ-１５%' OR description LIKE '%ドック型式モエソ-１５%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-db1bd82967e5be3cae3bc80fd1154fad-029139d36d8ec899-01'*/;
+# Time: 2025-09-27T22:42:03.540567Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.186003  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1759012922;
+INSERT INTO orders (user_id, product_id, shipped_status, created_at, product_name, product_weight, product_value) VALUES (85, 876, 'shipping', NOW(), '長寿命ユニット弐号機第２８０２号', 19, 36),(85, 876, 'shipping', NOW(), '長寿命ユニット弐号機第２８０２号', 19, 36),(85, 876, 'shipping', NOW(), '長寿命ユニット弐号機第２８０２号', 19, 36),(85, 876, 'shipping', NOW(), '長寿命ユニット弐号機第２８０２号', 19, 36),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 725, 'shipping', NOW(), 'マウス', 1, 30),(85, 290, 'shipping', NOW(), '充電器限定生産第１３０４号', 25, 20),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 383, 'shipping', NOW(), '高性能スピーカー初号機第６４８５号', 30, 23),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5),(85, 477, 'shipping', NOW(), '高剛性キット改弐号機', 5, 5) /*traceparent='00-eecce1a882d9d29ad83dfd1aaaf43ace-b455a8e1b6058896-01'*/;
+# Time: 2025-09-27T22:42:04.836626Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   139
+# Query_time: 1.705516  Lock_time: 0.000002 Rows_sent: 0  Rows_examined: 1
+SET timestamp=1759012923;
+UPDATE orders SET shipped_status = 'completed' WHERE order_id IN (1510381) /*traceparent='00-6665723273de26d95501f40c23cf20eb-d5d7198f476dec99-01'*/;
+# Time: 2025-09-27T22:42:06.088394Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.169453  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 0
+SET timestamp=1759012924;
+INSERT INTO user_sessions (session_uuid, user_id, expires_at) VALUES ('05e608e7-3432-4dc5-98cb-adff711ddd31', 59, '2025-09-29 07:42:04.91844685') /*traceparent='00-584c93fe34a5dfca551d0a0ad91f53b3-8df1cb377b19afbd-01'*/;
+# Time: 2025-09-27T22:42:06.780528Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 1.797944  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 1
+SET timestamp=1759012924;
+UPDATE orders SET shipped_status = 'completed' WHERE order_id IN (1297723) /*traceparent='00-ba13773946e14b9928e97f07255c2b46-4b64b2cefc07e282-01'*/;
+# Time: 2025-09-27T22:42:08.628736Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 3.347382  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012925;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ユニット第５７３４号%' OR description LIKE '%ユニット第５７３４号%') /*traceparent='00-9ff0b891f256b7fafb2a74830d7853ea-e7df96d35e080a28-01'*/;
+# Time: 2025-09-27T22:42:13.063876Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 7.782473  Lock_time: 0.000000 Rows_sent: 10  Rows_examined: 1000000
+SET timestamp=1759012925;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ユニット第５７３４号%' OR description LIKE '%ユニット第５７３４号%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-9ff0b891f256b7fafb2a74830d7853ea-7bfb4e9141191ef5-01'*/;
+# Time: 2025-09-27T22:42:16.694913Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 9.440623  Lock_time: 0.000001 Rows_sent: 999966  Rows_examined: 1999932
+SET timestamp=1759012927;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-71f143aded832680ea143d784c4966b3-d71cd287227ad2bd-01'*/;
+# Time: 2025-09-27T22:42:20.089196Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 5.910044  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012934;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高耐久デバイス第三世代型式メテネ-１３９０第１５５%' OR description LIKE '%高耐久デバイス第三世代型式メテネ-１３９０第１５５%') /*traceparent='00-578d40d6596a47707d4f3fe726bdb9c9-c63ffcf909989b1f-01'*/;
+# Time: 2025-09-27T22:42:24.162408Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 9.982970  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012934;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%高耐久デバイス第三世代型式メテネ-１３９０第１５５%' OR description LIKE '%高耐久デバイス第三世代型式メテネ-１３９０第１５５%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-578d40d6596a47707d4f3fe726bdb9c9-3a214e3525b403cf-01'*/;
+# Time: 2025-09-27T22:42:28.585214Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 3.594658  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 340108
+SET timestamp=1759012944;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%Iセンサーを搭載し、職場で安定した動作。現%' OR description LIKE '%Iセンサーを搭載し、職場で安定した動作。現%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-b0501aad776b55aa2a4cb127df5e8cdb-aae8a1ced0003bd5-01'*/;
+# Time: 2025-09-27T22:42:29.353248Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 4.359801  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012944;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%Iセンサーを搭載し、職場で安定した動作。現%' OR description LIKE '%Iセンサーを搭載し、職場で安定した動作。現%') /*traceparent='00-b0501aad776b55aa2a4cb127df5e8cdb-bf6459e04c25ec13-01'*/;
+# Time: 2025-09-27T22:42:35.104030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 4.680776  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012950;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%限定ユニット第１９１８号%' OR description LIKE '%限定ユニット第１９１８号%') /*traceparent='00-0d332c5e0ad0dced70d6d1e3b0a39dae-c6fe11647e18ce89-01'*/;
+# Time: 2025-09-27T22:42:36.733087Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 10.450229  Lock_time: 0.000001 Rows_sent: 999914  Rows_examined: 1999828
+SET timestamp=1759012946;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-6f3da73fdc243c8be331f4d3462ecf66-65fdd9e3fc2b167a-01'*/;
+# Time: 2025-09-27T22:42:40.019285Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 9.597250  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012950;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%限定ユニット第１９１８号%' OR description LIKE '%限定ユニット第１９１８号%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0d332c5e0ad0dced70d6d1e3b0a39dae-326aa6ffb6e78832-01'*/;
+# Time: 2025-09-27T22:42:45.412542Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 4.223416  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012961;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%６９９第１４１５号%' OR description LIKE '%６９９第１４１５号%') /*traceparent='00-ec89de687efad1b6754c9d38e827dd03-96ea6640731ac12a-01'*/;
+# Time: 2025-09-27T22:42:49.674305Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   139
+# Query_time: 8.482464  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012961;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%６９９第１４１５号%' OR description LIKE '%６９９第１４１５号%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ec89de687efad1b6754c9d38e827dd03-1b144abdb5841d7e-01'*/;
+# Time: 2025-09-27T22:42:55.737689Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 5.086323  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012970;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高剛性キット改零式第８０５０号%' OR description LIKE '%高剛性キット改零式第８０５０号%') /*traceparent='00-1fc5a8444d1ec06d476fd664ad8ae5c2-825f473d66012439-01'*/;
+# Time: 2025-09-27T22:42:55.820181Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 9.729121  Lock_time: 0.000001 Rows_sent: 999848  Rows_examined: 1999696
+SET timestamp=1759012966;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-7bf4b534a566bcdcadf94e2653615a2a-2fd39dac241e3641-01'*/;
+# Time: 2025-09-27T22:43:00.351470Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 9.701992  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012970;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%高剛性キット改零式第８０５０号%' OR description LIKE '%高剛性キット改零式第８０５０号%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-1fc5a8444d1ec06d476fd664ad8ae5c2-baa98f0107d4bcaf-01'*/;
+# Time: 2025-09-27T22:43:02.954057Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.744018  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 188300
+SET timestamp=1759012981;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%、教室で安定した動作。最大約34%' OR description LIKE '%、教室で安定した動作。最大約34%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-d7ee9bd7bf3f7058498d522a6c932db9-31a9ae427a269e80-01'*/;
+# Time: 2025-09-27T22:43:04.693992Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 3.485076  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012981;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%、教室で安定した動作。最大約34%' OR description LIKE '%、教室で安定した動作。最大約34%') /*traceparent='00-d7ee9bd7bf3f7058498d522a6c932db9-1a8a7b13ffdf066c-01'*/;
+# Time: 2025-09-27T22:43:08.627998Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.566635  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 287970
+SET timestamp=1759012986;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%限定業務用マウス弐号機特別%' OR description LIKE '%限定業務用マウス弐号機特別%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-dba85c3c71b3273abde2b9744142a7b9-f7751651f569182f-01'*/;
+# Time: 2025-09-27T22:43:09.300463Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 3.238891  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012986;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%限定業務用マウス弐号機特別%' OR description LIKE '%限定業務用マウス弐号機特別%') /*traceparent='00-dba85c3c71b3273abde2b9744142a7b9-722841beacc9a135-01'*/;
+# Time: 2025-09-27T22:43:14.638308Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 7.847985  Lock_time: 0.000001 Rows_sent: 999811  Rows_examined: 1999622
+SET timestamp=1759012986;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-3c15c15d9c70288905f27a3c1cc7ca7d-88d1b674f87bf7a3-01'*/;
+# Time: 2025-09-27T22:43:15.666391Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 3.531354  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 285958
+SET timestamp=1759012992;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%限定業務用マウス%' OR description LIKE '%限定業務用マウス%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-4afce30d32d8dd081d4c7e1bd4b2feb2-8648efe2ffb1b945-01'*/;
+# Time: 2025-09-27T22:43:16.422165Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   139
+# Query_time: 4.289572  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012992;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%限定業務用マウス%' OR description LIKE '%限定業務用マウス%') /*traceparent='00-4afce30d32d8dd081d4c7e1bd4b2feb2-696f7332e735970d-01'*/;
+# Time: 2025-09-27T22:43:19.487956Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.539252  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 100
+SET timestamp=1759012997;
+UPDATE orders SET shipped_status = 'delivering' WHERE order_id IN (1942963, 664217, 625500, 893810, 955258, 393609, 1145244, 1504892, 1713339, 1366297, 1595760, 1406153, 76930, 1085417, 135838, 1377849, 1230259, 954338, 1318305, 1439547, 1819132, 1905969, 1235203, 1887570, 1644204, 1956545, 1974048, 1226732, 1677158, 16519, 1102532, 958584, 505997, 1479927, 178911, 202619, 216624, 855437, 1797844, 1964030, 229016, 426095, 701141, 52410, 186710, 1518693, 1336123, 1610379, 1747151, 1574903, 766499, 1259485, 34652, 578028, 825399, 163511, 606914, 99344, 942358, 179422, 557718, 711925, 958429, 438288, 1947874, 1715171, 1320288, 1441627, 617163, 1226979, 217519, 1779000, 1918759, 150906, 934187, 1374637, 819062, 1669893, 632211, 738919, 882696, 304384, 563839, 1201862, 1208924, 29358, 865037, 1491171, 1848444, 1293646, 1412809, 207707, 772733, 342495, 101700, 1431002, 1142293, 528730, 596456, 425198) /*traceparent='00-3c15c15d9c70288905f27a3c1cc7ca7d-be22855f029e78e7-01'*/;
+# Time: 2025-09-27T22:43:21.881694Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 3.113638  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759012998;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%い。最大約13時間の駆動設計で、出張先でも安心。長%' OR description LIKE '%い。最大約13時間の駆動設計で、出張先でも安心。長%') /*traceparent='00-931e6103709de069058f04209c338fef-152c449c6a2167a0-01'*/;
+# Time: 2025-09-27T22:43:22.708963Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 3.940837  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 591924
+SET timestamp=1759012998;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%い。最大約13時間の駆動設計で、出張先でも安心。長%' OR description LIKE '%い。最大約13時間の駆動設計で、出張先でも安心。長%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-931e6103709de069058f04209c338fef-3272ded0286518f3-01'*/;
+# Time: 2025-09-27T22:43:26.652042Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 3.045273  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013003;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ーマネジメントを搭載し、スタジオで設置が%' OR description LIKE '%ーマネジメントを搭載し、スタジオで設置が%') /*traceparent='00-4966af85d715e5cb69e53a2252e58fa8-f0ceca75335374e5-01'*/;
+# Time: 2025-09-27T22:43:31.897719Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   139
+# Query_time: 4.187364  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013007;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%超軽量パック零式型式カヌセ-５３%' OR description LIKE '%超軽量パック零式型式カヌセ-５３%') /*traceparent='00-43604367c80228c19111d17c1ea900fc-a80875b8651731e5-01'*/;
+# Time: 2025-09-27T22:43:35.069633Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 9.841261  Lock_time: 0.000002 Rows_sent: 999739  Rows_examined: 1999478
+SET timestamp=1759013005;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-c58b894d5a2a81dcd3b2d03bed878628-b40755e2b0f59834-01'*/;
+# Time: 2025-09-27T22:43:37.133569Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 9.422217  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013007;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%超軽量パック零式型式カヌセ-５３%' OR description LIKE '%超軽量パック零式型式カヌセ-５３%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-43604367c80228c19111d17c1ea900fc-392d6f8b19779cc8-01'*/;
+# Time: 2025-09-27T22:43:41.216076Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   139
+# Query_time: 2.843935  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013018;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%力の設計。耐指紋コー%' OR description LIKE '%力の設計。耐指紋コー%') /*traceparent='00-f7a90c599cc2eb3debfea73158d5ed5f-d30010b100ff2fac-01'*/;
+# Time: 2025-09-27T22:43:44.716543Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.665407  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013022;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%出張先でも扱%' OR description LIKE '%出張先でも扱%') /*traceparent='00-48966566f205d96803d5c6cced2a7d77-b767b337f0f58bc8-01'*/;
+# Time: 2025-09-27T22:43:47.185026Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.143984  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013026;
+SELECT COUNT(*) FROM products /*traceparent='00-ba5075d6d033abd79b0ba4baacfcee54-35ecdbc8a697de2f-01'*/;
+# Time: 2025-09-27T22:43:47.534448Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.195994  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013026;
+SELECT COUNT(*) FROM products /*traceparent='00-e023a7636d42a4694e2c31018a8265db-b6db771fdf9ae968-01'*/;
+# Time: 2025-09-27T22:43:48.064029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.618220  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013026;
+SELECT COUNT(*) FROM products /*traceparent='00-0218ddc05ca24e80abe8a52f3a4b963c-3330b6f9cf95af34-01'*/;
+# Time: 2025-09-27T22:43:48.259208Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 1.610391  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013026;
+SELECT COUNT(*) FROM products /*traceparent='00-676efad6184efe15cdb2883ca2e115d0-34d64909468c6024-01'*/;
+# Time: 2025-09-27T22:43:48.455795Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.585918  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013026;
+SELECT COUNT(*) FROM products /*traceparent='00-a7fecd24a41ed675da31aaa22ce4b9b7-89a9527399e72ab1-01'*/;
+# Time: 2025-09-27T22:43:49.031886Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 1.061937  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 19917
+SET timestamp=1759013027;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 82
+	 AND o.product_name LIKE 'のワークフローを変えます。%' /*traceparent='00-bfd55c9d26e7cdcf0ac57d86748098a0-12808f4737c366d8-01'*/;
+# Time: 2025-09-27T22:43:49.122027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   165
+# Query_time: 1.883675  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013027;
+SELECT COUNT(*) FROM products /*traceparent='00-045e36f43970bbf0ba6d7462d6fa4475-4f22aa856825eb3f-01'*/;
+# Time: 2025-09-27T22:43:49.122484Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   172
+# Query_time: 1.229675  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 20060
+SET timestamp=1759013027;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 96
+	 AND o.product_name LIKE '%剛性の設計。モ%' /*traceparent='00-804ec55c8eadf16b95d33b800301ce81-962ef7546a2e9646-01'*/;
+# Time: 2025-09-27T22:43:49.438661Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.093315  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013027;
+SELECT COUNT(*) FROM products /*traceparent='00-b8ae963592de59b579c0025527915e23-1fab0f17db113c29-01'*/;
+# Time: 2025-09-27T22:43:49.595461Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.197345  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 19995
+SET timestamp=1759013028;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 76
+	 AND o.product_name LIKE '家庭用キーボード極第７０２０号%' /*traceparent='00-75f19fda2a62322a1060b63b9eaabc28-28351951b07bac3a-01'*/;
+# Time: 2025-09-27T22:43:49.703028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 1.252996  Lock_time: 0.000002 Rows_sent: 0  Rows_examined: 20103
+SET timestamp=1759013028;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 56
+	 AND o.product_name LIKE '%。約1427gの軽さで、男性向けの%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-928d419c6311c6d33797e896699927e3-77231d46e82c5027-01'*/;
+# Time: 2025-09-27T22:43:49.886288Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.372258  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20102
+SET timestamp=1759013028;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 91
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3bc3d453158606dffb4a9120ba97822d-23bf62fa93c8b724-01'*/;
+# Time: 2025-09-27T22:43:49.998096Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   162
+# Query_time: 2.528829  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013027;
+SELECT COUNT(*) FROM products /*traceparent='00-31dd48f57e181347629c1a7f3ef90718-b43a0cd420df7136-01'*/;
+# Time: 2025-09-27T22:43:50.111983Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.102948  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19944
+SET timestamp=1759013029;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 86
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-cc2d244e1126bb447af69aeb7437e7a4-e1f118f3be40f394-01'*/;
+# Time: 2025-09-27T22:43:50.122095Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 2.200774  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013027;
+SELECT COUNT(*) FROM products /*traceparent='00-b0caf2c7ff284c13c11ae1c6b9571fbb-5d379e0039bab7f6-01'*/;
+# Time: 2025-09-27T22:43:50.154723Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.610692  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013027;
+SELECT COUNT(*) FROM products /*traceparent='00-0722fc8818a628d44cd2fb0b038d040b-7acead3f93bcc4b4-01'*/;
+# Time: 2025-09-27T22:43:50.400617Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   165
+# Query_time: 1.038503  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19879
+SET timestamp=1759013029;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 38
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ff2ce223c55ed46f8a48e7fb2b923c25-783e2c789edc4493-01'*/;
+# Time: 2025-09-27T22:43:50.472494Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.407786  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-050815348b932dca2d4113bb69fbeb7f-928df42fe7f28af6-01'*/;
+# Time: 2025-09-27T22:43:50.656942Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.554624  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-d69512f4b0b55eb0f2a1f02911b5f1ab-7d5c13be934999e7-01'*/;
+# Time: 2025-09-27T22:43:50.760388Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.139344  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20052
+SET timestamp=1759013029;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 97
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-a957a837a227d9088942ec633fd4b19c-bb522c7e709ae601-01'*/;
+# Time: 2025-09-27T22:43:50.980029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   175
+# Query_time: 2.493937  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-0dc8b256629fe40f259892a6d532cd0d-f1de68c5244cc425-01'*/;
+# Time: 2025-09-27T22:43:51.153042Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 2.875938  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-013bfe90f7e6490509379769bb55a50f-196df65e88a96504-01'*/;
+# Time: 2025-09-27T22:43:51.237281Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 2.499251  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-3620ad559c2faf309db0c7ccda228518-f79e95c3df96a3fd-01'*/;
+# Time: 2025-09-27T22:43:51.261745Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 1.043645  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20277
+SET timestamp=1759013030;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 30
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-aba989eb475b9b0225d6f7c72bebe59b-8a89dd12100fee97-01'*/;
+# Time: 2025-09-27T22:43:51.412042Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.912707  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013028;
+SELECT COUNT(*) FROM products /*traceparent='00-ae7a5f06b77793a6ed20d35d83986c60-c383515fe5d41caa-01'*/;
+# Time: 2025-09-27T22:43:51.703029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   172
+# Query_time: 2.507997  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013029;
+SELECT COUNT(*) FROM products /*traceparent='00-ad0865e5ed96f1b2d341b103932b53d9-20ae2e165a9ef110-01'*/;
+# Time: 2025-09-27T22:43:51.803099Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.099973  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19986
+SET timestamp=1759013030;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 72
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-258b3f320842254de4cb38597b7aa2ef-be0f24152eac3a3b-01'*/;
+# Time: 2025-09-27T22:43:52.021858Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.578817  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013029;
+SELECT COUNT(*) FROM products /*traceparent='00-523747ce6d5bb1939e9462448e748585-4e28d6df9bc26386-01'*/;
+# Time: 2025-09-27T22:43:52.393696Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.493663  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013029;
+SELECT COUNT(*) FROM products /*traceparent='00-f2c51be34d0a331a9cf1091bd64c077e-e992a585a2862f5b-01'*/;
+# Time: 2025-09-27T22:43:52.454027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.300623  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-62ee56b5b49fcf16c02e035efbb586df-f69c56b0af0568cc-01'*/;
+# Time: 2025-09-27T22:43:52.560034Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 2.427196  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-79e4cdb9f1de601df2a76aa0948f4a0d-38321b3cc3b0dcb0-01'*/;
+# Time: 2025-09-27T22:43:52.584793Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.274750  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-0c74a0f5021a8d46ada25d467dcebea2-e9fc6e6382f44fa7-01'*/;
+# Time: 2025-09-27T22:43:52.668026Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   165
+# Query_time: 2.099991  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-85af420a1a6e69127f4704d9100331de-b262adad560bd47c-01'*/;
+# Time: 2025-09-27T22:43:52.808027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.572995  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-e728bd6ffd35e83debd920ab87d11514-a6bea10683a7bfa9-01'*/;
+# Time: 2025-09-27T22:43:53.076574Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.564527  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products /*traceparent='00-b8c3850fc2d2bc74258ef090d9481557-96868f00e184ddd3-01'*/;
+# Time: 2025-09-27T22:43:53.096589Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.284630  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20052
+SET timestamp=1759013031;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 97
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-d7ff832eab343dc0f7dae17fb3185218-8cc26deddfb7e608-01'*/;
+# Time: 2025-09-27T22:43:53.423415Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.384382  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013031;
+SELECT COUNT(*) FROM products /*traceparent='00-52928026074fdaca44c70ba592619a35-6d66f84094cd02e8-01'*/;
+# Time: 2025-09-27T22:43:53.464377Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 2.190345  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013031;
+SELECT COUNT(*) FROM products /*traceparent='00-e31b6d683d20389c94373070173f88c9-4ed2a99bba163647-01'*/;
+# Time: 2025-09-27T22:43:53.500598Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.042567  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20120
+SET timestamp=1759013032;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 88
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f0123cc41a0ecd5dbef6d60a8f42d698-2a507ccce2466b0d-01'*/;
+# Time: 2025-09-27T22:43:53.603791Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.177074  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013031;
+SELECT COUNT(*) FROM products /*traceparent='00-b6738be32fee015d1308b7c3da51068e-7e3b5fb695d5863a-01'*/;
+# Time: 2025-09-27T22:43:54.106922Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 2.233164  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013031;
+SELECT COUNT(*) FROM products /*traceparent='00-4c03ee42890f67393081c3ea272925a8-179a76b1b90b4720-01'*/;
+# Time: 2025-09-27T22:43:54.523451Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.310992  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products /*traceparent='00-34fe379eaf3032c0b440612be4a1b6c7-c749d27f80c5baef-01'*/;
+# Time: 2025-09-27T22:43:54.777920Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 2.158811  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products /*traceparent='00-a242bc546770c69e798770c6b19cba0c-2fef808e56a48c14-01'*/;
+# Time: 2025-09-27T22:43:54.811697Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.416275  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products /*traceparent='00-af7e3984a15c92aea3300d7271860395-597f124401b5d2bb-01'*/;
+# Time: 2025-09-27T22:43:55.122601Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.156569  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products /*traceparent='00-79f8ae1bd24e06fda077e2f979f5b71e-83824cab40a9d709-01'*/;
+# Time: 2025-09-27T22:43:55.257027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   172
+# Query_time: 2.276942  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products /*traceparent='00-a2e09f2710be6ef5506cf3c81bdaa7ed-c1444a698ced6f1d-01'*/;
+# Time: 2025-09-27T22:43:55.257135Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.152103  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013033;
+SELECT COUNT(*) FROM products /*traceparent='00-c001b87f414e00a642a538b0575c4049-1af3406ec92f2bad-01'*/;
+# Time: 2025-09-27T22:43:55.534024Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.356541  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013033;
+SELECT COUNT(*) FROM products /*traceparent='00-60a4ec50b0527f780e8306475c4b4092-ea660e3df92a691b-01'*/;
+# Time: 2025-09-27T22:43:55.604585Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.069842  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20277
+SET timestamp=1759013034;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 30
+	 ORDER BY o.arrived_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0fa214ee4a49d6b4353a59b1e24a812b-1044784f513e81ec-01'*/;
+# Time: 2025-09-27T22:43:56.061882Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.544849  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013033;
+SELECT COUNT(*) FROM products /*traceparent='00-a8a728af5e96b369a5af357fcab2948c-3d61fb646a978352-01'*/;
+# Time: 2025-09-27T22:43:56.065242Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.579048  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013033;
+SELECT COUNT(*) FROM products /*traceparent='00-0c81677a32de4b3d32c2ec32b9a64f63-ff9469abb477db0d-01'*/;
+# Time: 2025-09-27T22:43:56.106370Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 1.324271  Lock_time: 0.000002 Rows_sent: 0  Rows_examined: 20060
+SET timestamp=1759013034;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 96
+	 AND o.product_name LIKE '%定静穏設計キーボード丙型式マヌキ-４１８３第１８３３号%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3b36ed0de36e65f506013bca7898bc1a-d122b06ea6a6883f-01'*/;
+# Time: 2025-09-27T22:43:56.187792Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.426924  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013033;
+SELECT COUNT(*) FROM products /*traceparent='00-aa3bfb1c367d870d815d7448f90eab2a-a48de59760e4c942-01'*/;
+# Time: 2025-09-27T22:43:56.366862Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 1.010828  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19803
+SET timestamp=1759013035;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 92
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-34e1a2751bf84754adcb95174f3b9384-857b5349d6221034-01'*/;
+# Time: 2025-09-27T22:43:56.700028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 1.117995  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19966
+SET timestamp=1759013035;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 72
+	 AND o.product_name LIKE '%低遅延リンクを搭載し、職場で外出%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ec70f837f2502601ddbe11744fc858bb-fd277fb0094b1be5-01'*/;
+# Time: 2025-09-27T22:43:57.350286Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.519250  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013034;
+SELECT COUNT(*) FROM products /*traceparent='00-fa5a243f4f83feb6b9f409c8ad000e0d-869f1576ffbfb169-01'*/;
+# Time: 2025-09-27T22:43:57.782036Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.437130  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013035;
+SELECT COUNT(*) FROM products /*traceparent='00-4b0b497fbe8626a705d984141352cf13-9da0d7cc6bf16544-01'*/;
+# Time: 2025-09-27T22:43:58.446401Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.139947  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-d420fb4966091e57fc3216a28df5e926-1960f2242de232d9-01'*/;
+# Time: 2025-09-27T22:43:58.486232Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.242838  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-b0b5c682a7f9360cbad941b0b4884d9a-7c8c3002867e8d0a-01'*/;
+# Time: 2025-09-27T22:43:58.548065Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   172
+# Query_time: 2.258318  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-8404da0aa8a8694557a63d888d4f6baf-40ba179f371983f1-01'*/;
+# Time: 2025-09-27T22:43:58.556452Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.153745  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-cf407666942b85aa21ac0243e0d223db-92e766309901008a-01'*/;
+# Time: 2025-09-27T22:43:58.792864Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 1.929824  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-d3f136e852a44a4ecaad9a7211cfff2a-5dca9a6c5f82ff66-01'*/;
+# Time: 2025-09-27T22:43:58.856028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.155951  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products /*traceparent='00-70b227688055ff921cb7317df060f0da-a851e2708937229a-01'*/;
+# Time: 2025-09-27T22:43:58.872638Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 13.010248  Lock_time: 0.000000 Rows_sent: 20  Rows_examined: 233434
+SET timestamp=1759013025;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%筐体。低遅延リンクを搭載し、職場で長時間の%' OR description LIKE '%筐体。低遅延リンクを搭載し、職場で長時間の%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ea0c073e3199797aafad793903f2cd26-8fe2aadd153d3226-01'*/;
+# Time: 2025-09-27T22:43:59.314687Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.174128  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013037;
+SELECT COUNT(*) FROM products /*traceparent='00-01f9ffc5c2074c28d4ac743aed0c0bd9-73c4e7fba52379d8-01'*/;
+# Time: 2025-09-27T22:43:59.721688Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.138655  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19942
+SET timestamp=1759013038;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 29
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-c4e2691e917c17c174f0bd8de24b5d4c-4c85baff72f996cb-01'*/;
+# Time: 2025-09-27T22:43:59.896036Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.389876  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013037;
+SELECT COUNT(*) FROM products /*traceparent='00-7998caa85e85ba6ca5b69c1bbf0ab2e7-b2923aca8e4660d7-01'*/;
+# Time: 2025-09-27T22:44:00.065585Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.282545  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013037;
+SELECT COUNT(*) FROM products /*traceparent='00-032018aa3c5951c147c118a7006db5db-d3d0a25f54ad2ee6-01'*/;
+# Time: 2025-09-27T22:44:00.523711Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.020294  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20196
+SET timestamp=1759013039;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 15
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f867d10c1c913b9745cd7e7aad29608c-78017816b895c067-01'*/;
+# Time: 2025-09-27T22:44:01.090237Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   168
+# Query_time: 2.297201  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013038;
+SELECT COUNT(*) FROM products /*traceparent='00-ce1a9d6cf6b135edcd2d914eff7c2c6f-2f8a4c0665da08b4-01'*/;
+# Time: 2025-09-27T22:44:01.175029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.087697  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20049
+SET timestamp=1759013040;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 79
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e2537491513549c1f4412147285f3d60-5ba545bb74206406-01'*/;
+# Time: 2025-09-27T22:44:01.355409Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.475708  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013038;
+SELECT COUNT(*) FROM products /*traceparent='00-1a720921622b9b9688a747fbce47750b-cccfe791d6b63d2b-01'*/;
+# Time: 2025-09-27T22:44:02.032028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.670915  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013039;
+SELECT COUNT(*) FROM products /*traceparent='00-b2b922b6b98f3e8cf059a94008c53139-91e387aa04de51c0-01'*/;
+# Time: 2025-09-27T22:44:02.195768Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.467609  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013039;
+SELECT COUNT(*) FROM products /*traceparent='00-0b618b71b61c27a7660dd658975a6ba6-ce3ce7571544a92b-01'*/;
+# Time: 2025-09-27T22:44:02.325949Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.441909  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013039;
+SELECT COUNT(*) FROM products /*traceparent='00-8ab10097908edd1032155944c71be0ed-c71f635b6c865dfd-01'*/;
+# Time: 2025-09-27T22:44:03.104029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.566054  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013040;
+SELECT COUNT(*) FROM products /*traceparent='00-54b4e4d263a82145a66414ebd276fec5-4827403a340fa20d-01'*/;
+# Time: 2025-09-27T22:44:03.285738Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.515605  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013040;
+SELECT COUNT(*) FROM products /*traceparent='00-fc75f2e9625d755ed565d59ae7e564af-c0a845cd37184a50-01'*/;
+# Time: 2025-09-27T22:44:03.334303Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 1.007529  Lock_time: 0.000002 Rows_sent: 0  Rows_examined: 19949
+SET timestamp=1759013042;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 89
+	 AND o.product_name LIKE '%限定業務用マウス弐号機第６１０４号%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ad81de525c6123df2e84d749bfd54328-55b7712feadcb80a-01'*/;
+# Time: 2025-09-27T22:44:03.708033Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.369923  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013041;
+SELECT COUNT(*) FROM products /*traceparent='00-d5166322d0f9298cee37d221a764bd0d-755c8ee24b5497b1-01'*/;
+# Time: 2025-09-27T22:44:04.531027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.416562  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19942
+SET timestamp=1759013043;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 29
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ecfc7be06555dd1b152c0278115c52c6-af16e4b7f05fa819-01'*/;
+# Time: 2025-09-27T22:44:04.679139Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.476102  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013042;
+SELECT COUNT(*) FROM products /*traceparent='00-828c236b03b7674d142a9e5b2f2cb831-13f2c30c87d64cf7-01'*/;
+# Time: 2025-09-27T22:44:05.799977Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.052837  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013043;
+SELECT COUNT(*) FROM products /*traceparent='00-e7bc26f15c3f0a36c81efe33e7131760-aa248ac9eedb9767-01'*/;
+# Time: 2025-09-27T22:44:05.985556Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.157524  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013043;
+SELECT COUNT(*) FROM products /*traceparent='00-c7fc096caf16327a83816baa1d839c29-0093bf219d3dc826-01'*/;
+# Time: 2025-09-27T22:44:06.838030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.037414  Lock_time: 0.000002 Rows_sent: 0  Rows_examined: 20032
+SET timestamp=1759013045;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 97
+	 AND o.product_name LIKE '扱いやすい。最大約2時間の駆動設計で、スタ%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0437c148ee960f07c36e7b195c4da3f0-f7a4db48218d83de-01'*/;
+# Time: 2025-09-27T22:44:06.902070Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.147494  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013044;
+SELECT COUNT(*) FROM products /*traceparent='00-5ced35ba160e983292eb7c9a0033b19f-7875fc08295d98a4-01'*/;
+# Time: 2025-09-27T22:44:06.982771Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.255687  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013044;
+SELECT COUNT(*) FROM products /*traceparent='00-057607ae4ee5ed2d5444cf4d86c18a84-28a56725da597468-01'*/;
+# Time: 2025-09-27T22:44:07.932761Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.036726  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20074
+SET timestamp=1759013046;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 20
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f35163d4d9a4bab00faf4ce1970e0372-14cbd1592717ff91-01'*/;
+# Time: 2025-09-27T22:44:08.381029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.368995  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013046;
+SELECT COUNT(*) FROM products /*traceparent='00-20bc51f182f12ea41ab55967eb21be77-ce57c17dc818804c-01'*/;
+# Time: 2025-09-27T22:44:09.355028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.152998  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19936
+SET timestamp=1759013048;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 99
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-df1385ac474ac27b78522925fbc8f945-d6e1f357d98364c2-01'*/;
+# Time: 2025-09-27T22:44:09.440424Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 23.585623  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013025;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%筐体。低遅延リンクを搭載し、職場で長時間の%' OR description LIKE '%筐体。低遅延リンクを搭載し、職場で長時間の%') /*traceparent='00-ea0c073e3199797aafad793903f2cd26-811dc45a1ef332a0-01'*/;
+# Time: 2025-09-27T22:44:10.162030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.148542  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013048;
+SELECT COUNT(*) FROM products /*traceparent='00-642c6f8b59eba152d111f00881016c47-b654cde65d713061-01'*/;
+# Time: 2025-09-27T22:44:10.845296Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.344262  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013048;
+SELECT COUNT(*) FROM products /*traceparent='00-11fdbae3754450cd80a35dcbe8a7627c-c8954d431b698996-01'*/;
+# Time: 2025-09-27T22:44:11.049836Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 17.610802  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 292478
+SET timestamp=1759013033;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%静穏設計デバイス零式%' OR description LIKE '%静穏設計デバイス零式%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-27445c3dc3345c52c87449f6ace5bf35-77ab34db6e618bd3-01'*/;
+# Time: 2025-09-27T22:44:11.617035Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.183683  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 15530
+SET timestamp=1759013050;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%構を搭載し、教室で長時間の作業%' OR description LIKE '%構を搭載し、教室で長時間の作業%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-5ed8665996ee2f1c1543beb60bac7082-67ea16c37adf6a6b-01'*/;
+# Time: 2025-09-27T22:44:12.731552Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.081521  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013050;
+SELECT COUNT(*) FROM products /*traceparent='00-b5897c462ceb64f45121881704d1c35a-d0b962a0da218a04-01'*/;
+# Time: 2025-09-27T22:44:12.840027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 2.326829  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013050;
+SELECT COUNT(*) FROM products /*traceparent='00-b425d4e47fd83adb10a9de2e4f2a9bca-c112f8e896424f08-01'*/;
+# Time: 2025-09-27T22:44:13.318032Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.472566  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013050;
+SELECT COUNT(*) FROM products /*traceparent='00-6137018633fbb44c13cd55c7c6252ccb-725fc2d720bae8d6-01'*/;
+# Time: 2025-09-27T22:44:13.764878Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.309830  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013051;
+SELECT COUNT(*) FROM products /*traceparent='00-7b40a0f1c95ac46084e3d516e7e06f2c-59579c51eabb7815-01'*/;
+# Time: 2025-09-27T22:44:14.970641Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.793609  Lock_time: 0.000000 Rows_sent: 20  Rows_examined: 35768
+SET timestamp=1759013053;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ち出しやすい。最大約25時%' OR description LIKE '%ち出しやすい。最大約25時%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-c868c09ca8fd192318df027eda92b0af-6ff282affd76cb4b-01'*/;
+# Time: 2025-09-27T22:44:15.650942Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.316907  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013053;
+SELECT COUNT(*) FROM products /*traceparent='00-2be4c4284d37ded0ec7d7c68def7a1fa-faec4c08a9ef43b8-01'*/;
+# Time: 2025-09-27T22:44:15.661954Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.213921  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013053;
+SELECT COUNT(*) FROM products /*traceparent='00-6111fed62e57329bc7124fe862da002a-5c243c4a332af34c-01'*/;
+# Time: 2025-09-27T22:44:16.041040Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.017001  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013054;
+SELECT COUNT(*) FROM products /*traceparent='00-de906c2c340c652e197afa72e7b83ece-416e525720c274a6-01'*/;
+# Time: 2025-09-27T22:44:16.900262Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.503978  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013054;
+SELECT COUNT(*) FROM products /*traceparent='00-d56a3b73e7b2677b265fb050cc13e35f-1f9e09e9b1113307-01'*/;
+# Time: 2025-09-27T22:44:17.106578Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 26.431578  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013030;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%キット第３６７１号%' OR description LIKE '%キット第３６７１号%') /*traceparent='00-18cda4831ae6b370407543b8ff4cbfce-bcd39a8d2abe3539-01'*/;
+# Time: 2025-09-27T22:44:17.835062Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.390029  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013055;
+SELECT COUNT(*) FROM products /*traceparent='00-bafd65a889ad3b55e3ec2121011b3a9a-941a0cd2be0de3e3-01'*/;
+# Time: 2025-09-27T22:44:17.893681Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.239640  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013055;
+SELECT COUNT(*) FROM products /*traceparent='00-e64ea4c0835683d9b7f576e909ec4ac1-54eac39b1cf2ed35-01'*/;
+# Time: 2025-09-27T22:44:18.751594Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.564530  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013056;
+SELECT COUNT(*) FROM products /*traceparent='00-f8183aed2846d0cc26f721a2e378bd3f-04431e40c3c55dea-01'*/;
+# Time: 2025-09-27T22:44:18.798031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.230485  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013056;
+SELECT COUNT(*) FROM products /*traceparent='00-79ad317fcc4e5ddb940ccca7a35f0db1-6a45a557db128120-01'*/;
+# Time: 2025-09-27T22:44:18.818028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 26.136750  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013032;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%新型ユニット第６０９８号%' OR description LIKE '%新型ユニット第６０９８号%') /*traceparent='00-12c8811195f113665c406509f1ea7034-3e5639ad4577b70f-01'*/;
+# Time: 2025-09-27T22:44:19.029404Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.138352  Lock_time: 0.000000 Rows_sent: 20  Rows_examined: 19869
+SET timestamp=1759013057;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 9
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-c3f94b88c8501a085085bb140064d88d-c996e4e686504334-01'*/;
+# Time: 2025-09-27T22:44:19.477468Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 2.106970  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013057;
+SELECT COUNT(*) FROM products /*traceparent='00-624326c76b0edeb1503dc3ca55618a6d-8d80cf82fcea8948-01'*/;
+# Time: 2025-09-27T22:44:20.019968Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   165
+# Query_time: 26.001892  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013034;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%静穏設計デバイス零式%' OR description LIKE '%静穏設計デバイス零式%') /*traceparent='00-27445c3dc3345c52c87449f6ace5bf35-f872e2cd17553dc5-01'*/;
+# Time: 2025-09-27T22:44:20.047028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.017145  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19988
+SET timestamp=1759013059;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 53
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-9e5a502da96252f2e483b973b50a06f3-c8e32474b8db5789-01'*/;
+# Time: 2025-09-27T22:44:20.211028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 17.466987  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 292874
+SET timestamp=1759013042;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%高剛性キット改%' OR description LIKE '%高剛性キット改%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-b1b350ec8f9b9e3fdfc9c225d27dee5a-8e8c39158176795f-01'*/;
+# Time: 2025-09-27T22:44:20.357034Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.391907  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013057;
+SELECT COUNT(*) FROM products /*traceparent='00-e28a86ffd1e2996e62bf5a7ca850dceb-fde258f12e6e58ad-01'*/;
+# Time: 2025-09-27T22:44:20.939334Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.030290  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013058;
+SELECT COUNT(*) FROM products /*traceparent='00-572ed29d86c5695fae99931dc7ad5fb7-bddf8f8256c06a8f-01'*/;
+# Time: 2025-09-27T22:44:21.144983Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.187233  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013058;
+SELECT COUNT(*) FROM products /*traceparent='00-99f81717da9aa10f6ead4fd51cd9e795-dc8beb21b12dee5b-01'*/;
+# Time: 2025-09-27T22:44:21.779049Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 26.632188  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013035;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高耐久デバイス%' OR description LIKE '%高耐久デバイス%') /*traceparent='00-182c7ac501f7324310d2392c95f278df-ae70c892c09eb743-01'*/;
+# Time: 2025-09-27T22:44:22.297608Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 26.073532  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013036;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高剛性の筐体。抗菌コートを搭載し、職場で安定した動作。%' OR description LIKE '%高剛性の筐体。抗菌コートを搭載し、職場で安定した動作。%') /*traceparent='00-17bc36a33ee39cd2ca6a0564cac79c45-d349369e17193e54-01'*/;
+# Time: 2025-09-27T22:44:22.376246Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.226193  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 20176
+SET timestamp=1759013061;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 15
+	 AND o.product_name LIKE 'シ。低遅延リン%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3df380aa51b0e398f6143ab6cd235264-5ad350ed8f62f711-01'*/;
+# Time: 2025-09-27T22:44:22.630031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.400043  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013060;
+SELECT COUNT(*) FROM products /*traceparent='00-7685ef673b428c08270f54183d0f9e1c-475724cb9783f9e6-01'*/;
+# Time: 2025-09-27T22:44:23.315037Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.374003  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013060;
+SELECT COUNT(*) FROM products /*traceparent='00-f248eb6ee35e68b32e9a564ffc9fb535-eb8eb060da410bf6-01'*/;
+# Time: 2025-09-27T22:44:23.496030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.096250  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20254
+SET timestamp=1759013062;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 32
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-28b1fd17edf4179e311fff8aa4cb5736-170b916c5a2ae3bd-01'*/;
+# Time: 2025-09-27T22:44:23.697310Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.406201  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013061;
+SELECT COUNT(*) FROM products /*traceparent='00-993b39d738a5a85adf241d38d78438e8-cb3ec677c2ad3304-01'*/;
+# Time: 2025-09-27T22:44:24.308592Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   165
+# Query_time: 2.564464  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013061;
+SELECT COUNT(*) FROM products /*traceparent='00-b00bf4c3080f2657320fd5a1a17e9666-e50ab898c8d75911-01'*/;
+# Time: 2025-09-27T22:44:24.786449Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.110868  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19936
+SET timestamp=1759013063;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 99
+	 ORDER BY o.arrived_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-9ab834545683ae6b2d577521dc9f701b-2fbeffbe22148355-01'*/;
+# Time: 2025-09-27T22:44:25.164521Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.801476  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013063;
+SELECT COUNT(*) FROM products /*traceparent='00-b35b554263d551c4e5879c2748c35aff-f733c43c2e421782-01'*/;
+# Time: 2025-09-27T22:44:25.486811Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 6.227779  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 103193
+SET timestamp=1759013059;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%／抗菌コートを搭載し、出張先で手%' OR description LIKE '%／抗菌コートを搭載し、出張先で手%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e6606deb9b237d9fa6c532c21129c2ef-e9b4489610710275-01'*/;
+# Time: 2025-09-27T22:44:25.772736Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.434786  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013063;
+SELECT COUNT(*) FROM products /*traceparent='00-87569b6a0ad7cc636071fa9d536524b3-12ecf837312aaffd-01'*/;
+# Time: 2025-09-27T22:44:26.205551Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.975502  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013064;
+SELECT COUNT(*) FROM products /*traceparent='00-4a6be2c80349b1253ee956356c853f3b-420c6c38a194d435-01'*/;
+# Time: 2025-09-27T22:44:26.507030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 28.037754  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013038;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%で持ち出しやすい。Hi%' OR description LIKE '%で持ち出しやすい。Hi%') /*traceparent='00-d017e69557c5ae39bce364a25bdcb76a-1eadbba517620945-01'*/;
+# Time: 2025-09-27T22:44:26.959084Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.824452  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013065;
+SELECT COUNT(*) FROM products /*traceparent='00-75971c15e6363f7dba2c5bdd874efb02-0be2ce1e3a645fc0-01'*/;
+# Time: 2025-09-27T22:44:26.971809Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 2.152900  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013064;
+SELECT COUNT(*) FROM products /*traceparent='00-4d4761423e2fbd8d030bb85a6927f717-53397f6c1b5cb3ea-01'*/;
+# Time: 2025-09-27T22:44:27.025423Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 25.785303  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013041;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高剛性キット改甲第６９１０号%' OR description LIKE '%高剛性キット改甲第６９１０号%') /*traceparent='00-0986588334400a3dd78ce8736110ef7f-d1f685ba4bc36ceb-01'*/;
+# Time: 2025-09-27T22:44:27.313581Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.121498  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013065;
+SELECT COUNT(*) FROM products /*traceparent='00-5db1de7d92822969741c3e3fd5856321-1eee0b33f5b595e6-01'*/;
+# Time: 2025-09-27T22:44:27.724140Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.951320  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013065;
+SELECT COUNT(*) FROM products /*traceparent='00-9d3264922496dc84922a9b9f63038c72-24fd4a40dbe582ce-01'*/;
+# Time: 2025-09-27T22:44:28.182110Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.949235  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013066;
+SELECT COUNT(*) FROM products /*traceparent='00-31672409769b618ecaf1ad76b037f0e1-a533f483e968f891-01'*/;
+# Time: 2025-09-27T22:44:28.335042Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.129104  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013066;
+SELECT COUNT(*) FROM products /*traceparent='00-aeb74d0b9e2978f76226af8c4e99a690-483723b5b4854bdc-01'*/;
+# Time: 2025-09-27T22:44:28.476029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 1.966987  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013066;
+SELECT COUNT(*) FROM products /*traceparent='00-16e138f08e8e0151aac97425f2437499-4370b3712ce44180-01'*/;
+# Time: 2025-09-27T22:44:29.322416Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.159383  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20254
+SET timestamp=1759013068;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 32
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-15cb9c58d5889ef0957a86ff30b51f34-daa1ed4d6b523448-01'*/;
+# Time: 2025-09-27T22:44:29.390390Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.044355  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20274
+SET timestamp=1759013068;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 41
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-4b5314d3b5d8452e99601a0daf21112f-f12db321a2507231-01'*/;
+# Time: 2025-09-27T22:44:29.711276Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.892095  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013067;
+SELECT COUNT(*) FROM products /*traceparent='00-83b8b4d98e4de23e240547fa289823ca-ae72964d93f2adaf-01'*/;
+# Time: 2025-09-27T22:44:29.992033Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.213318  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013067;
+SELECT COUNT(*) FROM products /*traceparent='00-c618afe435253007dec6b86c05fc1aee-affd56157aa5644e-01'*/;
+# Time: 2025-09-27T22:44:30.314302Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.124775  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013068;
+SELECT COUNT(*) FROM products /*traceparent='00-5aa085dd69f7a7dc2fc32fd03b2d61f5-d78d73e5fb987a76-01'*/;
+# Time: 2025-09-27T22:44:30.668223Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 27.321831  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013043;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%も安心。あなたのワークフローを変えます%' OR description LIKE '%も安心。あなたのワークフローを変えます%') /*traceparent='00-ca9484cade9ce90b37fb858ed2be172e-f776664de24c4d37-01'*/;
+# Time: 2025-09-27T22:44:30.807031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 2.166992  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013068;
+SELECT COUNT(*) FROM products /*traceparent='00-d301ff08e478d5be815e40563da572be-dcfcd04ca25d9087-01'*/;
+# Time: 2025-09-27T22:44:31.922264Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.205231  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013069;
+SELECT COUNT(*) FROM products /*traceparent='00-341fd77c30a53c06e6ab1d458933b7c9-da1c08d1e788706e-01'*/;
+# Time: 2025-09-27T22:44:32.091217Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.093044  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013069;
+SELECT COUNT(*) FROM products /*traceparent='00-56a8a6b0c91692ecb0dc24080b8c2352-4ce816e5fe7c1dc8-01'*/;
+# Time: 2025-09-27T22:44:32.120743Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 25.112687  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013047;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%高剛性キット改%' OR description LIKE '%高剛性キット改%') /*traceparent='00-b1b350ec8f9b9e3fdfc9c225d27dee5a-5316c1f721d7b2aa-01'*/;
+# Time: 2025-09-27T22:44:32.441362Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.239331  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013070;
+SELECT COUNT(*) FROM products /*traceparent='00-784ab1a06082c73841a34631e5dfbd54-7bd1bf36f321045e-01'*/;
+# Time: 2025-09-27T22:44:32.664160Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.208127  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013070;
+SELECT COUNT(*) FROM products /*traceparent='00-e441a200fd2cfc05747ad08a8b829008-65feaecb0ba72428-01'*/;
+# Time: 2025-09-27T22:44:32.818029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.082649  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19870
+SET timestamp=1759013071;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 8
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-d5d4526c9b53b6ca7d5539274ec59d86-d5401a4f5fed7ce3-01'*/;
+# Time: 2025-09-27T22:44:32.895636Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.213602  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013070;
+SELECT COUNT(*) FROM products /*traceparent='00-a11e944ced19f90ece3b80111beaf70b-5ba784e9760b9278-01'*/;
+# Time: 2025-09-27T22:44:32.945810Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 1.015778  Lock_time: 0.000003 Rows_sent: 1  Rows_examined: 20257
+SET timestamp=1759013071;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 30
+	 AND o.product_name LIKE '援する。あ%' /*traceparent='00-2b74e0195bf465861cd207b74960b013-968890e8dc6752c3-01'*/;
+# Time: 2025-09-27T22:44:33.140037Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.019178  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20277
+SET timestamp=1759013072;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 30
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-24e8c2ef369d864665571fa8fec21ecd-f7ef29a9c43a4c65-01'*/;
+# Time: 2025-09-27T22:44:34.029029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.085143  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20196
+SET timestamp=1759013072;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 93
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-67051c7a5c580f847660abbda1495141-3f33a6ec84d8c5f7-01'*/;
+# Time: 2025-09-27T22:44:34.706608Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.178068  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013072;
+SELECT COUNT(*) FROM products /*traceparent='00-ed8c00b27fae92d8cb238118291b31c3-10718cfa68d1abc6-01'*/;
+# Time: 2025-09-27T22:44:34.807033Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.090950  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013072;
+SELECT COUNT(*) FROM products /*traceparent='00-9db9e9a305e4979ab84a5943c60005ea-4d7050d8ec2a5bff-01'*/;
+# Time: 2025-09-27T22:44:34.908582Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.210036  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013072;
+SELECT COUNT(*) FROM products /*traceparent='00-14bf62822adf1973f1ff591d99b11000-b347243ea83b7666-01'*/;
+# Time: 2025-09-27T22:44:35.159996Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.154667  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 17011
+SET timestamp=1759013074;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ュを搭載し、職場で持ち出しやす%' OR description LIKE '%ュを搭載し、職場で持ち出しやす%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-6a886be42bb3c0c087400f07c1770d69-2f073d72638ecfc0-01'*/;
+# Time: 2025-09-27T22:44:35.234343Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.251270  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013072;
+SELECT COUNT(*) FROM products /*traceparent='00-f9d4dd4cb429d57404499e3d65ba7bee-369a9ddce63d1f05-01'*/;
+# Time: 2025-09-27T22:44:35.504027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.509986  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013072;
+SELECT COUNT(*) FROM products /*traceparent='00-d94f56e90339e36ca0ed926507e7434a-b1ee693573c80ef2-01'*/;
+# Time: 2025-09-27T22:44:35.776632Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   134
+# Query_time: 16.296950  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 291943
+SET timestamp=1759013059;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%高耐久デバイス%' OR description LIKE '%高耐久デバイス%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-182c7ac501f7324310d2392c95f278df-915eb8c125bb25c7-01'*/;
+# Time: 2025-09-27T22:44:35.959054Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 1.110258  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 20054
+SET timestamp=1759013074;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 20
+	 AND o.product_name LIKE '%390gの軽さで、シ%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ba0ba02d97397dc4d402735314d3c175-7a01826edeb299ad-01'*/;
+# Time: 2025-09-27T22:44:36.615261Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.309229  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013074;
+SELECT COUNT(*) FROM products /*traceparent='00-82e8cbc5575df552639d0acb8d96461a-9f71d1c7d988d5d1-01'*/;
+# Time: 2025-09-27T22:44:36.978598Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.254958  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013074;
+SELECT COUNT(*) FROM products /*traceparent='00-931e4847c37addf7775e2915d4719b65-29ffc343f0c17d7f-01'*/;
+# Time: 2025-09-27T22:44:37.267030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.348996  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013074;
+SELECT COUNT(*) FROM products /*traceparent='00-c1347890e8ec6c36e312a76f10d08224-3ac1b459b8e03f28-01'*/;
+# Time: 2025-09-27T22:44:37.373028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.141996  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013075;
+SELECT COUNT(*) FROM products /*traceparent='00-09cecc773047c131c1c53a977f55c935-6109a78e94f56914-01'*/;
+# Time: 2025-09-27T22:44:37.563034Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.056992  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013075;
+SELECT COUNT(*) FROM products /*traceparent='00-db6a8adf8e52aed9e056244f4a9bb993-50111d3919baf0e2-01'*/;
+# Time: 2025-09-27T22:44:37.645557Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.952526  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013075;
+SELECT COUNT(*) FROM products /*traceparent='00-06a9f320bf00039a21269b2fd91e19c8-9273835b8da60954-01'*/;
+# Time: 2025-09-27T22:44:38.539317Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.271805  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20196
+SET timestamp=1759013077;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 93
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3f8a9de5aef0e15ee52c706e683b27e3-a812c061e57da13b-01'*/;
+# Time: 2025-09-27T22:44:38.710028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.088523  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013076;
+SELECT COUNT(*) FROM products /*traceparent='00-3ef56ffa487cb5f1000b561a5f5c681a-5884f2559252692c-01'*/;
+# Time: 2025-09-27T22:44:38.953325Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.121348  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013076;
+SELECT COUNT(*) FROM products /*traceparent='00-7269f8324c480fdd5a8880ba7dc4ed7e-24fb0676bb82a5a7-01'*/;
+# Time: 2025-09-27T22:44:39.508031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 2.128277  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013077;
+SELECT COUNT(*) FROM products /*traceparent='00-b7e0863b1806880b22a62121a45f618a-5184d5cf15bbafe9-01'*/;
+# Time: 2025-09-27T22:44:39.650089Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.082517  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013077;
+SELECT COUNT(*) FROM products /*traceparent='00-c87c1ef701d049987119926fd3f1a854-acb3408d7dbf8ed8-01'*/;
+# Time: 2025-09-27T22:44:39.669634Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.053545  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20095
+SET timestamp=1759013078;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 27
+	 ORDER BY o.arrived_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-2e79ed229e12439faaa6eecb0c9fda17-0dfeb675aa856033-01'*/;
+# Time: 2025-09-27T22:44:39.885368Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.232819  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013077;
+SELECT COUNT(*) FROM products /*traceparent='00-1dbc310d02119cebb6e73a8c728c56a3-872834fa3b7ef0e7-01'*/;
+# Time: 2025-09-27T22:44:40.079035Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.289003  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013077;
+SELECT COUNT(*) FROM products /*traceparent='00-f6e627973c6e6a0d82295a1a4703e8bb-47ae48f6dcc3933c-01'*/;
+# Time: 2025-09-27T22:44:40.112179Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 1.140126  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19921
+SET timestamp=1759013078;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 83
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-958d884d80374e2ae930635181ca499b-ebd05af5f96394f0-01'*/;
+# Time: 2025-09-27T22:44:41.168795Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.433516  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20046
+SET timestamp=1759013079;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 47
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-44cd140a7514472c117c0be89eb3c809-c449ef88c3d8fbec-01'*/;
+# Time: 2025-09-27T22:44:41.690042Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.947286  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013078;
+SELECT COUNT(*) FROM products /*traceparent='00-90180324909eb713dbbe8f6f2729d30d-b7b3cdf1770ed67d-01'*/;
+# Time: 2025-09-27T22:44:42.256426Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 25.354047  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013056;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%構を搭載し、教室で長時間の作業%' OR description LIKE '%構を搭載し、教室で長時間の作業%') /*traceparent='00-5ed8665996ee2f1c1543beb60bac7082-53d2bd5a9db1dc48-01'*/;
+# Time: 2025-09-27T22:44:42.732702Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.788496  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013079;
+SELECT COUNT(*) FROM products /*traceparent='00-527603c893c1215e8b26dcc356fd84f6-31ebca981840a5aa-01'*/;
+# Time: 2025-09-27T22:44:42.848498Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 13.451467  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 219034
+SET timestamp=1759013069;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%扱いやすい。職場でも扱いやすいバランス。毎日の相棒に —%' OR description LIKE '%扱いやすい。職場でも扱いやすいバランス。毎日の相棒に —%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-91eb4c2408e876d08e571d7e69bb17f5-7099c1c6634caa5e-01'*/;
+# Time: 2025-09-27T22:44:42.943631Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 3.277216  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013079;
+SELECT COUNT(*) FROM products /*traceparent='00-10a93d961fe668a94fed1c2e40448a86-33b44f049c841302-01'*/;
+# Time: 2025-09-27T22:44:43.546031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.199641  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 20100
+SET timestamp=1759013082;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 88
+	 AND o.product_name LIKE '%防滴のボディ。%' /*traceparent='00-413796be623328d7b7a75f263eef44f6-b2d7281acb3bbed5-01'*/;
+# Time: 2025-09-27T22:44:43.861512Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 3.206286  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013080;
+SELECT COUNT(*) FROM products /*traceparent='00-b766cb82984ed19c86215d07ac8f7115-324d277af38cd905-01'*/;
+# Time: 2025-09-27T22:44:44.343291Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   136
+# Query_time: 2.639965  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013081;
+SELECT COUNT(*) FROM products /*traceparent='00-2d56e9e0f22e3ae7cc8e0ea37a78198c-711920b45ab5c193-01'*/;
+# Time: 2025-09-27T22:44:44.369088Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.152601  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20104
+SET timestamp=1759013083;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 23
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e3fcc4b004ebc24731bf59d6461640ab-aad027d4a90fe18b-01'*/;
+# Time: 2025-09-27T22:44:44.518755Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 3.037707  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013081;
+SELECT COUNT(*) FROM products /*traceparent='00-33ab041392527469854e07406f4c8c46-8fa255dde7c6cf0e-01'*/;
+# Time: 2025-09-27T22:44:44.595827Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 24.529934  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013060;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%機構を搭載%' OR description LIKE '%機構を搭載%') /*traceparent='00-627d71080e96cb6e6244ce7cbee76842-f6f60c888d43bfe8-01'*/;
+# Time: 2025-09-27T22:44:45.710249Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.714214  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013082;
+SELECT COUNT(*) FROM products /*traceparent='00-b06bf291079256d734e5cbbadbeaa5b7-62886f43f2bb01e6-01'*/;
+# Time: 2025-09-27T22:44:45.790297Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.857943  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013082;
+SELECT COUNT(*) FROM products /*traceparent='00-cf2d9e274c762b0905aaed8001cd5e8e-0173a3cbdb81aa31-01'*/;
+# Time: 2025-09-27T22:44:45.919723Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.311385  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19870
+SET timestamp=1759013084;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 8
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-91405d65e28f1880b7a44c1cebfac6e6-8adcb9c25c4990d8-01'*/;
+# Time: 2025-09-27T22:44:46.324027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.400976  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013083;
+SELECT COUNT(*) FROM products /*traceparent='00-841578702d4287c547e0442ef91bbf6b-27a6e615329a04d1-01'*/;
+# Time: 2025-09-27T22:44:46.867248Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.164801  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013084;
+SELECT COUNT(*) FROM products /*traceparent='00-f7799495aff9e4f4fd1af8ecec998cf6-5e907b1a2dcbb398-01'*/;
+# Time: 2025-09-27T22:44:46.900329Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.304883  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013084;
+SELECT COUNT(*) FROM products /*traceparent='00-99e46e2ea3e6325b4f843ffaaa68915b-f55fec6deec5504b-01'*/;
+# Time: 2025-09-27T22:44:47.662894Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.004860  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19943
+SET timestamp=1759013086;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 94
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-6944d11d065c5f4c2421153c68f92ccd-b85b0a267590fb89-01'*/;
+# Time: 2025-09-27T22:44:48.042521Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 2.245478  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013085;
+SELECT COUNT(*) FROM products /*traceparent='00-90c99080e14942658247148661910626-8eb4a3a7677bee79-01'*/;
+# Time: 2025-09-27T22:44:48.147909Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.217138  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013085;
+SELECT COUNT(*) FROM products /*traceparent='00-196f6bbc85a7d4d6a981a9afa0506ca4-1e9d79f521efcc4c-01'*/;
+# Time: 2025-09-27T22:44:48.347917Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 26.144876  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013062;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%出先でもすぐ使える。最大約1%' OR description LIKE '%出先でもすぐ使える。最大約1%') /*traceparent='00-a769d933163c7449bf09d95ee998bcfe-73a0c0096ab3c270-01'*/;
+# Time: 2025-09-27T22:44:48.479183Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.116150  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013086;
+SELECT COUNT(*) FROM products /*traceparent='00-fdd7449d6959e5177e57b99a0bd10bab-784628e6baa0e0c6-01'*/;
+# Time: 2025-09-27T22:44:49.075640Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.097496  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013086;
+SELECT COUNT(*) FROM products /*traceparent='00-dbbcbd3d7caab4471505ac46e142b8d4-012e7a44b714ae3f-01'*/;
+# Time: 2025-09-27T22:44:49.806029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.130494  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013087;
+SELECT COUNT(*) FROM products /*traceparent='00-c6b30bbdf3dd635519c9d270f88f8950-fcc1a9aefbdd47bd-01'*/;
+# Time: 2025-09-27T22:44:50.247037Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.179656  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013088;
+SELECT COUNT(*) FROM products /*traceparent='00-b099b894601c9108df729b995fce0cb8-cd1174496ad8ad34-01'*/;
+# Time: 2025-09-27T22:44:50.320139Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.169392  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013088;
+SELECT COUNT(*) FROM products /*traceparent='00-1c14dd01b9887344dbf9c36be4e15222-98486830bd132780-01'*/;
+# Time: 2025-09-27T22:44:50.637252Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 2.209218  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013088;
+SELECT COUNT(*) FROM products /*traceparent='00-f93ac3e25e1f3728704aefd2081442fb-c32a654fb11687f4-01'*/;
+# Time: 2025-09-27T22:44:50.746027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.266801  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013088;
+SELECT COUNT(*) FROM products /*traceparent='00-2e64f80999de7449004dd13dd366549a-0dcab20eb0a7565a-01'*/;
+# Time: 2025-09-27T22:44:51.355250Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.033492  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19916
+SET timestamp=1759013090;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 99
+	 AND o.product_name LIKE '搭載し、出張先で扱いやすい。教室でも%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-007683c9b66d2ff8be56bf359c6d2d01-e6897021f9d4771c-01'*/;
+# Time: 2025-09-27T22:44:51.923702Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 1.967037  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013089;
+SELECT COUNT(*) FROM products /*traceparent='00-23a1f87a39cf0d324fb1e54e25691fab-79a94c8f35734418-01'*/;
+# Time: 2025-09-27T22:44:52.051402Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.245311  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013089;
+SELECT COUNT(*) FROM products /*traceparent='00-43bbfe9070d2d88d0afba781b5301c75-645b8bc82fe258c8-01'*/;
+# Time: 2025-09-27T22:44:52.212535Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.965428  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013090;
+SELECT COUNT(*) FROM products /*traceparent='00-8c368d0ef09de81c9c6abf0a25475178-0454b31dab6d62cb-01'*/;
+# Time: 2025-09-27T22:44:52.373028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 2.316474  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013090;
+SELECT COUNT(*) FROM products /*traceparent='00-54ce9c518b982fcf175354e97892be54-126014b0586f2a77-01'*/;
+# Time: 2025-09-27T22:44:52.482486Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.115454  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20274
+SET timestamp=1759013091;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 41
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-948f7ee793d108d0970cf0a286a1e842-ae8ac023a1599622-01'*/;
+# Time: 2025-09-27T22:44:53.073180Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.327008  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013090;
+SELECT COUNT(*) FROM products /*traceparent='00-886127d6b9b0421e35a0bba79bd00ccb-04ae3341b61a87b5-01'*/;
+# Time: 2025-09-27T22:44:53.469027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.054866  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20266
+SET timestamp=1759013092;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 42
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0825b1dd6360456d2ec1633a6a249947-73021f7e2b2552ee-01'*/;
+# Time: 2025-09-27T22:44:53.564544Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   169
+# Query_time: 1.959491  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013091;
+SELECT COUNT(*) FROM products /*traceparent='00-00dabed11764c716eabe11eb7ee0e0e6-57fb6e6aa3cd5f5e-01'*/;
+# Time: 2025-09-27T22:44:53.640027Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   193
+# Query_time: 1.880995  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013091;
+SELECT COUNT(*) FROM products /*traceparent='00-e90e579152e2ca6b83874061d2b1d3bb-fe3b4826af834e3c-01'*/;
+# Time: 2025-09-27T22:44:54.086031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 25.608827  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013068;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%／抗菌コートを搭載し、出張先で手%' OR description LIKE '%／抗菌コートを搭載し、出張先で手%') /*traceparent='00-e6606deb9b237d9fa6c532c21129c2ef-80c0d49aff74ca40-01'*/;
+# Time: 2025-09-27T22:44:54.253029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.001749  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013092;
+SELECT COUNT(*) FROM products /*traceparent='00-4e9a3c9f8618930d4f4330a013a17be7-4865efb276d0898e-01'*/;
+# Time: 2025-09-27T22:44:54.499028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.015933  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20248
+SET timestamp=1759013093;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 34
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-c979192d4a09a4570f59be924a3ba6bd-07842ff0d6d51e82-01'*/;
+# Time: 2025-09-27T22:44:54.564037Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.044287  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013092;
+SELECT COUNT(*) FROM products /*traceparent='00-e728fcc43d39a945c92035297df3f6fb-f51af1036141a533-01'*/;
+# Time: 2025-09-27T22:44:54.826918Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 26.778058  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013068;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ち出しやすい。最大約25時%' OR description LIKE '%ち出しやすい。最大約25時%') /*traceparent='00-c868c09ca8fd192318df027eda92b0af-b35cfbf8678e545b-01'*/;
+# Time: 2025-09-27T22:44:54.975029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   196
+# Query_time: 2.150993  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013092;
+SELECT COUNT(*) FROM products /*traceparent='00-c5f52c31e00700935d71949877582a0c-84769cfde5d7b266-01'*/;
+# Time: 2025-09-27T22:44:54.983310Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.993280  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013092;
+SELECT COUNT(*) FROM products /*traceparent='00-d1759471f9f259f8af46bdc68a1961ef-60daf08aeaed71b0-01'*/;
+# Time: 2025-09-27T22:44:55.945404Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.124701  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013093;
+SELECT COUNT(*) FROM products /*traceparent='00-48da61b316eaf67ceeb6ece413f4a2a6-52c45c02bee01623-01'*/;
+# Time: 2025-09-27T22:44:56.163158Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.033606  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19944
+SET timestamp=1759013095;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 86
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-71fa00154220473df62f8e9fa9a99ca2-23330542fc7bea34-01'*/;
+# Time: 2025-09-27T22:44:56.436644Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.928787  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013094;
+SELECT COUNT(*) FROM products /*traceparent='00-c47778bb684101b6aef4a27bf7dfcf9b-3b2c6467495c1e0f-01'*/;
+# Time: 2025-09-27T22:44:56.717028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   193
+# Query_time: 2.087991  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013094;
+SELECT COUNT(*) FROM products /*traceparent='00-e174bead6e2ef6b9f2e267edae6fe2e8-cae36cf3f7114f7d-01'*/;
+# Time: 2025-09-27T22:44:57.040028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   196
+# Query_time: 2.048986  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013094;
+SELECT COUNT(*) FROM products /*traceparent='00-c4f2306253b6a31776fc2f1bb216fe07-53ed216b878ec952-01'*/;
+# Time: 2025-09-27T22:44:57.125522Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.173152  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19874
+SET timestamp=1759013095;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 74
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-69f68d1b758b857a9465db6e5af9b313-6aaafdc5ba1c15ed-01'*/;
+# Time: 2025-09-27T22:44:57.142383Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.069351  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013095;
+SELECT COUNT(*) FROM products /*traceparent='00-fc0b577d5859defb702ad4bf6051ecf3-ec005970fb662319-01'*/;
+# Time: 2025-09-27T22:44:57.591224Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 2.069696  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013095;
+SELECT COUNT(*) FROM products /*traceparent='00-06680a8347f8a826845e0ab634466456-a091d5325f5bd953-01'*/;
+# Time: 2025-09-27T22:44:57.850534Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.057167  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013095;
+SELECT COUNT(*) FROM products /*traceparent='00-d0529dcef9e57eb6fdc8dd8fd3174e78-bf33c4419574dc94-01'*/;
+# Time: 2025-09-27T22:44:58.224966Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 1.739517  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013096;
+SELECT COUNT(*) FROM products /*traceparent='00-0b04c2ac8d294a399543c1a29c16702b-740a1aafa86d99fa-01'*/;
+# Time: 2025-09-27T22:44:58.237340Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 1.080307  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19783
+SET timestamp=1759013097;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 92
+	 AND o.product_name LIKE '%薄型耐衝撃充電器丙弐号機%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-950158c473dd44b95ff4227d70dbf774-abd17c97d28c02dd-01'*/;
+# Time: 2025-09-27T22:44:58.277038Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.108003  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013096;
+SELECT COUNT(*) FROM products /*traceparent='00-89cf1277313f6a7292497890f6b9a922-dfeaf989a1019980-01'*/;
+# Time: 2025-09-27T22:44:59.485043Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.337995  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013097;
+SELECT COUNT(*) FROM products /*traceparent='00-99cd5bdbda781739ec8946f50dd16819-fcc2d3992b2b2069-01'*/;
+# Time: 2025-09-27T22:45:00.133029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.300650  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013097;
+SELECT COUNT(*) FROM products /*traceparent='00-b3fb2ec756133e4125a26cc4bd8ec5ea-1109e4453fec8667-01'*/;
+# Time: 2025-09-27T22:45:00.198589Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.075540  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013098;
+SELECT COUNT(*) FROM products /*traceparent='00-ce76455fc1f573f61ff2fef15752aa07-3a3f1e4d93e5a084-01'*/;
+# Time: 2025-09-27T22:45:00.385237Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.034778  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013098;
+SELECT COUNT(*) FROM products /*traceparent='00-0b030676815cd42d2402dff31e5c1b04-501089195693ce3b-01'*/;
+# Time: 2025-09-27T22:45:00.420035Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 2.174568  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013098;
+SELECT COUNT(*) FROM products /*traceparent='00-f81b61ee62aee9d8d1f332a6dd2bbc80-87381322efb8528e-01'*/;
+# Time: 2025-09-27T22:45:01.484506Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 2.092453  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013099;
+SELECT COUNT(*) FROM products /*traceparent='00-6eb107ea57c8defc722fbfc3a183eb81-fdac8cb0a15bb0eb-01'*/;
+# Time: 2025-09-27T22:45:01.505180Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.019852  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013099;
+SELECT COUNT(*) FROM products /*traceparent='00-b37f3ee7d8bbdc93adfd250378b5f51a-a572b6559a148ec9-01'*/;
+# Time: 2025-09-27T22:45:02.167301Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.025788  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products /*traceparent='00-fd9508427d6e975c62cdab716e1b6cda-867c7698d197bb9f-01'*/;
+# Time: 2025-09-27T22:45:02.499155Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.109119  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products /*traceparent='00-3a603000fdf4482e051f66c103170687-89904854aff655be-01'*/;
+# Time: 2025-09-27T22:45:02.727031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 2.092351  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products /*traceparent='00-9b894c0ae39de676839dc65c74ac5da2-2a4d2f91d462380f-01'*/;
+# Time: 2025-09-27T22:45:03.390593Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.021205  Lock_time: 0.000003 Rows_sent: 20  Rows_examined: 20104
+SET timestamp=1759013102;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 23
+	 ORDER BY o.arrived_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f807da762bb8bdcc40fbe506cd49d617-655b3cbbe337ca52-01'*/;
+# Time: 2025-09-27T22:45:03.614138Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 2.104103  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013101;
+SELECT COUNT(*) FROM products /*traceparent='00-d1942fb5915a2077825a06a15d77b689-5200d49b44f5bad1-01'*/;
+# Time: 2025-09-27T22:45:04.665038Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 1.937953  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013102;
+SELECT COUNT(*) FROM products /*traceparent='00-247e2a96bfcfaf9aeea476dbe4e867d8-1f38b4659cd61b16-01'*/;
+# Time: 2025-09-27T22:45:05.269134Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.878465  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013103;
+SELECT COUNT(*) FROM products /*traceparent='00-e99bd77e06b0ce32643b389dc3e08ea5-69903d5cec8ba161-01'*/;
+# Time: 2025-09-27T22:45:05.554571Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 24.986538  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013080;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%第三世代第１０４５%' OR description LIKE '%第三世代第１０４５%') /*traceparent='00-2a05f483f8dcbf8376d170ecda68c04d-2828a702213293b5-01'*/;
+# Time: 2025-09-27T22:45:06.002774Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 26.489740  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013079;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ュを搭載し、職場で持ち出しやす%' OR description LIKE '%ュを搭載し、職場で持ち出しやす%') /*traceparent='00-6a886be42bb3c0c087400f07c1770d69-be64d26a243850e9-01'*/;
+# Time: 2025-09-27T22:45:06.010819Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.904786  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 37813
+SET timestamp=1759013104;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%軽さで、研究用途向けの作業を支援する。あなた%' OR description LIKE '%軽さで、研究用途向けの作業を支援する。あなた%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f0229c4f0dff8b885220759d3a08c865-9f6852860b297d23-01'*/;
+# Time: 2025-09-27T22:45:06.192676Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.037632  Lock_time: 0.000003 Rows_sent: 20  Rows_examined: 20081
+SET timestamp=1759013105;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 33
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-c0fefa7396e12fb92164a3be033e3a78-62b859b38f8cfc6f-01'*/;
+# Time: 2025-09-27T22:45:06.534632Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 2.119030  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013104;
+SELECT COUNT(*) FROM products /*traceparent='00-19b7de408434d8b7bdc77912bbc76596-280f5640e805126a-01'*/;
+# Time: 2025-09-27T22:45:06.774318Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 23.044067  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013083;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%電力高剛性のフレ%' OR description LIKE '%電力高剛性のフレ%') /*traceparent='00-994d24c470faa5f171732efce45d6b08-04b11db59d6a34dc-01'*/;
+# Time: 2025-09-27T22:45:06.863921Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.592755  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 28832
+SET timestamp=1759013105;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%いにちょうどいい。最大約3時間の駆動設%' OR description LIKE '%いにちょうどいい。最大約3時間の駆動設%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ac61ce1a73f769f7642d642c89c7804e-08ae39ac3918b84b-01'*/;
+# Time: 2025-09-27T22:45:06.884893Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 2.199226  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013104;
+SELECT COUNT(*) FROM products /*traceparent='00-78f148f8fd123a7a72ac555a77f0fbe8-12dfec26ab9280c6-01'*/;
+# Time: 2025-09-27T22:45:08.184029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.971063  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013106;
+SELECT COUNT(*) FROM products /*traceparent='00-3b1fa10e0daa4e5996ecae4fcbad2ae1-f837cbaadd16387d-01'*/;
+# Time: 2025-09-27T22:45:08.763423Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 1.899334  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013106;
+SELECT COUNT(*) FROM products /*traceparent='00-95d98700f92389c2110bb9467eccdbb0-d2c3e2e3d01b332a-01'*/;
+# Time: 2025-09-27T22:45:09.034835Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 23.519011  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013085;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%長寿命ヘッドセット第１３６８号%' OR description LIKE '%長寿命ヘッドセット第１３６８号%') /*traceparent='00-4dfed708acc6c89c6c7d8f2462062497-1893ff136eb17409-01'*/;
+# Time: 2025-09-27T22:45:09.389547Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 15.053062  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 285878
+SET timestamp=1759013094;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%限定業務用%' OR description LIKE '%限定業務用%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-7c576d579aee2c1aca92a7c6c8ef6fa7-32aab10052a38666-01'*/;
+# Time: 2025-09-27T22:45:09.886095Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.330660  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013107;
+SELECT COUNT(*) FROM products /*traceparent='00-292075ffc6d5e00077b5d0ba0de50d1c-f92d06e07b52875a-01'*/;
+# Time: 2025-09-27T22:45:09.976031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 1.888852  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013108;
+SELECT COUNT(*) FROM products /*traceparent='00-ef95603f5889f956f5c166509593847a-39df7c57583d3188-01'*/;
+# Time: 2025-09-27T22:45:10.236031Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.001723  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013108;
+SELECT COUNT(*) FROM products /*traceparent='00-075dedf325b29e7a0056dac500fe6922-72d550cbdd442370-01'*/;
+# Time: 2025-09-27T22:45:10.907029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   163
+# Query_time: 2.086977  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013108;
+SELECT COUNT(*) FROM products /*traceparent='00-d12df897bb980f6143965767f88bd7af-a38a0daf80acc4fc-01'*/;
+# Time: 2025-09-27T22:45:11.235030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 2.189996  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013109;
+SELECT COUNT(*) FROM products /*traceparent='00-ccd542cb6645fd5797c2cb46bfb32e10-2cd274c781c95c3d-01'*/;
+# Time: 2025-09-27T22:45:13.044034Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 1.808951  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013111;
+SELECT COUNT(*) FROM products /*traceparent='00-e754c03c496b6c529762ab8c444cd735-1ecc8c687c489a64-01'*/;
+# Time: 2025-09-27T22:45:13.084491Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.232442  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013110;
+SELECT COUNT(*) FROM products /*traceparent='00-fb8701b506231d8b209ed66e705f90a7-9f1f3731ceaf9721-01'*/;
+# Time: 2025-09-27T22:45:13.662858Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.082507  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20022
+SET timestamp=1759013112;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 19
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-f0a0e97568bc3d769c9d9cc92de4c93e-1e2f650092c994c6-01'*/;
+# Time: 2025-09-27T22:45:13.664044Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.088493  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013111;
+SELECT COUNT(*) FROM products /*traceparent='00-6bc53c851a1fc8b40498f4f09aad2c43-41d0b200e97412f3-01'*/;
+# Time: 2025-09-27T22:45:13.896302Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 23.407258  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013090;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%扱いやすい。職場でも扱いやすいバランス。毎日の相棒に —%' OR description LIKE '%扱いやすい。職場でも扱いやすいバランス。毎日の相棒に —%') /*traceparent='00-91eb4c2408e876d08e571d7e69bb17f5-9558687e377130dc-01'*/;
+# Time: 2025-09-27T22:45:14.067294Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 1.007034  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20274
+SET timestamp=1759013113;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 41
+	 ORDER BY o.arrived_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-38367d86b095ca3348a4aee39bd61b5c-cfa69b7d5d980730-01'*/;
+# Time: 2025-09-27T22:45:14.934572Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.044345  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013112;
+SELECT COUNT(*) FROM products /*traceparent='00-6dca2470bc3afc322488d211ec92489e-fc4be83af2c508e9-01'*/;
+# Time: 2025-09-27T22:45:15.588974Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.921929  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013113;
+SELECT COUNT(*) FROM products /*traceparent='00-f9485cde74ec35d99fb2190fd10db652-1f218c544360db36-01'*/;
+# Time: 2025-09-27T22:45:15.718440Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 1.994395  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013113;
+SELECT COUNT(*) FROM products /*traceparent='00-92a5626725d4b4d3eb05a8b900604b14-1c51ba27a1561f44-01'*/;
+# Time: 2025-09-27T22:45:15.917774Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 1.934208  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013113;
+SELECT COUNT(*) FROM products /*traceparent='00-82076d5658cec441ce354e9ee18366ef-1c7f067247c7acfb-01'*/;
+# Time: 2025-09-27T22:45:16.096932Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 1.977893  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013114;
+SELECT COUNT(*) FROM products /*traceparent='00-85b5fd618d32d3c75839f271274ca332-db7613360a677238-01'*/;
+# Time: 2025-09-27T22:45:16.306999Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 5.172954  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 95423
+SET timestamp=1759013111;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%・耐指紋コーティングを搭載し、教室で手%' OR description LIKE '%・耐指紋コーティングを搭載し、教室で手%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-5723918f91551be761d68880e9209cf3-b254b861b893cb36-01'*/;
+# Time: 2025-09-27T22:45:16.695341Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 1.948868  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013114;
+SELECT COUNT(*) FROM products /*traceparent='00-f0c53a3fe8868f8c42e3d09baf55ddac-51b9df41ed033c08-01'*/;
+# Time: 2025-09-27T22:45:17.692905Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.094864  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013115;
+SELECT COUNT(*) FROM products /*traceparent='00-dc29fb0e7637e5447cddd7e3b2884557-48d613820acf5641-01'*/;
+# Time: 2025-09-27T22:45:17.854588Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.080557  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013115;
+SELECT COUNT(*) FROM products /*traceparent='00-101c6482aa542381acb52aa4608d3648-ed736645ce569acb-01'*/;
+# Time: 2025-09-27T22:45:18.249602Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   190
+# Query_time: 2.105488  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013116;
+SELECT COUNT(*) FROM products /*traceparent='00-39f815bc90620e3214970f185179ba06-924fa7af516ac489-01'*/;
+# Time: 2025-09-27T22:45:18.402036Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.084361  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013116;
+SELECT COUNT(*) FROM products /*traceparent='00-f16cc6da6d76046aa449815cc4354b63-cfe7179abf0da85f-01'*/;
+# Time: 2025-09-27T22:45:18.726792Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 23.705750  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013095;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%を搭載し、出張先%' OR description LIKE '%を搭載し、出張先%') /*traceparent='00-2eede119d6c772e5b1878139fdfe32bd-f237fddf95482743-01'*/;
+# Time: 2025-09-27T22:45:18.816007Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.115898  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013116;
+SELECT COUNT(*) FROM products /*traceparent='00-ba782b559a0b1c44614926b747fb67ae-57c3d92758b4b488-01'*/;
+# Time: 2025-09-27T22:45:18.964871Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.056831  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013116;
+SELECT COUNT(*) FROM products /*traceparent='00-d3cea17438a81da4f054343941a831cb-069a5102b398f2a9-01'*/;
+# Time: 2025-09-27T22:45:19.938660Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.074607  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013117;
+SELECT COUNT(*) FROM products /*traceparent='00-780dad139d8a63cc20964dd2f0bbebec-6da22895043e82fa-01'*/;
+# Time: 2025-09-27T22:45:20.342898Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   196
+# Query_time: 23.296867  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013097;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%軽さで、研究用途向けの作業を支援する。あなた%' OR description LIKE '%軽さで、研究用途向けの作業を支援する。あなた%') /*traceparent='00-f0229c4f0dff8b885220759d3a08c865-af8700f18ca20148-01'*/;
+# Time: 2025-09-27T22:45:20.559154Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.835116  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013118;
+SELECT COUNT(*) FROM products /*traceparent='00-187932b9b21958f4d358bc58a15f2a75-ef43261b889071cd-01'*/;
+# Time: 2025-09-27T22:45:20.741876Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   174
+# Query_time: 2.280833  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013118;
+SELECT COUNT(*) FROM products /*traceparent='00-9931f4e54c5fc0f9cb0fc02c464e87dc-d8276a870d7d13a9-01'*/;
+# Time: 2025-09-27T22:45:21.067699Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   166
+# Query_time: 2.273949  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013118;
+SELECT COUNT(*) FROM products /*traceparent='00-fd2b0972120a3c03e40eb469bd7e5d5e-46184a29381eeaa4-01'*/;
+# Time: 2025-09-27T22:45:21.091030Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.274870  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013118;
+SELECT COUNT(*) FROM products /*traceparent='00-217be3b41fb718f8098f780965c0b838-fa2661188aa8a72b-01'*/;
+# Time: 2025-09-27T22:45:21.153861Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.187813  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013118;
+SELECT COUNT(*) FROM products /*traceparent='00-16808c79ba338fe4fccc141ebd70e61d-7383bc1d5106bf82-01'*/;
+# Time: 2025-09-27T22:45:21.424049Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   196
+# Query_time: 1.045120  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20062
+SET timestamp=1759013120;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 47
+	 AND o.product_name LIKE '%デバイス第%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0d84e9254841e643b0d9e5a4e2ff97de-073d3f9868c09770-01'*/;
+# Time: 2025-09-27T22:45:22.659035Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.961004  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013120;
+SELECT COUNT(*) FROM products /*traceparent='00-88e2e70668fd0959f66fa295d2c1b6e6-c434e483fe934ac6-01'*/;
+# Time: 2025-09-27T22:45:23.816333Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.264297  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013121;
+SELECT COUNT(*) FROM products /*traceparent='00-1ea4d439aa9a608b6690308c0bd9621d-026815e00139816a-01'*/;
+# Time: 2025-09-27T22:45:24.385488Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   164
+# Query_time: 23.954539  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%センサー・%' OR description LIKE '%センサー・%') /*traceparent='00-d01f87d1e0f739744006ab22351f2334-1e2d3c4a4d9f18a0-01'*/;
+# Time: 2025-09-27T22:45:24.520029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   211
+# Query_time: 2.252994  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013122;
+SELECT COUNT(*) FROM products /*traceparent='00-0daf5beadda8164a312405eff872ddf2-4200700b83b70f4b-01'*/;
+# Time: 2025-09-27T22:45:24.818869Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 24.564819  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%いにちょうどいい。最大約3時間の駆動設%' OR description LIKE '%いにちょうどいい。最大約3時間の駆動設%') /*traceparent='00-ac61ce1a73f769f7642d642c89c7804e-6df5543c0fbcc5b3-01'*/;
+# Time: 2025-09-27T22:45:24.998056Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.179868  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013122;
+SELECT COUNT(*) FROM products /*traceparent='00-2997e0b841b90ef3ae4fa1d514edc775-dc7353d5391a41f9-01'*/;
+# Time: 2025-09-27T22:45:25.252222Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   171
+# Query_time: 24.391958  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013100;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%・耐指紋コーティングを搭載し、教室で手%' OR description LIKE '%・耐指紋コーティングを搭載し、教室で手%') /*traceparent='00-5723918f91551be761d68880e9209cf3-7ff697a1d7d79727-01'*/;
+# Time: 2025-09-27T22:45:25.666614Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 2.080238  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013123;
+SELECT COUNT(*) FROM products /*traceparent='00-677f9db2b943d6186a007fe516993d13-49595313a2383e35-01'*/;
+# Time: 2025-09-27T22:45:26.729710Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.076400  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013124;
+SELECT COUNT(*) FROM products /*traceparent='00-5e66ba97660efea771037152fdb5fc31-6664787eee19eae1-01'*/;
+# Time: 2025-09-27T22:45:27.104001Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.095969  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013125;
+SELECT COUNT(*) FROM products /*traceparent='00-ffa8c06df9710f3dac15476774aec230-72f186f5320ae982-01'*/;
+# Time: 2025-09-27T22:45:27.332453Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   211
+# Query_time: 1.982422  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013125;
+SELECT COUNT(*) FROM products /*traceparent='00-4954822bcc3d475d6e00cb4e2f5a51e8-432e9094dc5add21-01'*/;
+# Time: 2025-09-27T22:45:27.844028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.098982  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013125;
+SELECT COUNT(*) FROM products /*traceparent='00-1e9e0f47badd3f60c8006b617affc23c-d7fbe84538e01c89-01'*/;
+# Time: 2025-09-27T22:45:28.894032Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 1.047924  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20248
+SET timestamp=1759013127;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 34
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-fda8831c59968858c104006145533205-424c6eaf7b58e349-01'*/;
+# Time: 2025-09-27T22:45:28.894811Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.144778  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19944
+SET timestamp=1759013127;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 86
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-767d2d0365612073f869025f94870ebd-a52bda826ad954b3-01'*/;
+# Time: 2025-09-27T22:45:29.178889Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.008274  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013127;
+SELECT COUNT(*) FROM products /*traceparent='00-903747fba6a2725b8a511aeffc9e44db-eae5abca80294934-01'*/;
+# Time: 2025-09-27T22:45:29.720969Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 22.832608  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013106;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%型式フレヨ-１８３４%' OR description LIKE '%型式フレヨ-１８３４%') /*traceparent='00-530dcb4cdf263da4d6aa2dcd263c9c17-3e1a0e2ae1474076-01'*/;
+# Time: 2025-09-27T22:45:30.066029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   167
+# Query_time: 1.156857  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20120
+SET timestamp=1759013128;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 88
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e495a3ce8d9d69efa6f96a154a3f7627-5d72b32890690870-01'*/;
+# Time: 2025-09-27T22:45:30.986029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 24.439789  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013106;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%ユニット第二世代第７６６号%' OR description LIKE '%ユニット第二世代第７６６号%') /*traceparent='00-cfc904027c459087bb62475e2bac7ccf-db3e2af6f6f9bff2-01'*/;
+# Time: 2025-09-27T22:45:31.022359Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   170
+# Query_time: 2.115248  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013128;
+SELECT COUNT(*) FROM products /*traceparent='00-5a030583b905da2dac4ee55a9e910a3e-c3f914070c4c946f-01'*/;
+# Time: 2025-09-27T22:45:31.658436Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 9.572880  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 181758
+SET timestamp=1759013122;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ワーマネジメント・モジュール設計・抗菌%' OR description LIKE '%ワーマネジメント・モジュール設計・抗菌%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-bbda5e9aa94b7264310ab119175314c6-d7abf36e7e03ea1b-01'*/;
+# Time: 2025-09-27T22:45:31.747036Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.962345  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013129;
+SELECT COUNT(*) FROM products /*traceparent='00-92d2a182db926647214f6e48dc64581b-1e843d1b85cadb78-01'*/;
+# Time: 2025-09-27T22:45:32.729029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 1.013989  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19921
+SET timestamp=1759013131;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 83
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-73b7128b7da055cfcce772426752f4e9-76a50d3ca7a10f6f-01'*/;
+# Time: 2025-09-27T22:45:33.445250Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 6.707988  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 118571
+SET timestamp=1759013126;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ッドセット%' OR description LIKE '%ッドセット%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-32fb08992463eb765a96cad74b2e1b71-d46dc5942ea08273-01'*/;
+# Time: 2025-09-27T22:45:33.758684Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   176
+# Query_time: 1.947945  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013131;
+SELECT COUNT(*) FROM products /*traceparent='00-72de68126d76b737ea908f7bdea80b4e-873ba3b8a8dbf51b-01'*/;
+# Time: 2025-09-27T22:45:34.077029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   215
+# Query_time: 2.085301  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013131;
+SELECT COUNT(*) FROM products /*traceparent='00-81ccc6ff4ddf3d395101e17948bc3b43-245b93c1f4f0d057-01'*/;
+# Time: 2025-09-27T22:45:34.130029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   173
+# Query_time: 2.047758  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013132;
+SELECT COUNT(*) FROM products /*traceparent='00-23a699d99e62004fa6adb784dafee9bc-dc4f1b89094d1e9f-01'*/;
+# Time: 2025-09-27T22:45:34.463420Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   135
+# Query_time: 23.998132  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013110;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%マネジメントを搭載し、出張先で手入れが楽。低遅延リンク・静%' OR description LIKE '%マネジメントを搭載し、出張先で手入れが楽。低遅延リンク・静%') /*traceparent='00-72f7da1804966f7ad68a0ec051474c0c-ff85112e289fdf7f-01'*/;
+# Time: 2025-09-27T22:45:35.349485Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 27.394390  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 489657
+SET timestamp=1759013107;
+SELECT product_id, name, value, weight, image, description FROM products WHERE (name LIKE '%ジュール設計を搭載し、スタジオで安定した動作。職場でも扱いや%' OR description LIKE '%ジュール設計を搭載し、スタジオで安定した動作。職場でも扱いや%') ORDER BY name ASC, product_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-597c7388638bcf4859f6abbbbea792b4-834cf84ee9fb4b74-01'*/;
+# Time: 2025-09-27T22:45:35.628219Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 2.163160  Lock_time: 0.000000 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013133;
+SELECT COUNT(*) FROM products /*traceparent='00-2887726254d8dcf0de38ba25c168550e-d12c7df8ad22c7a4-01'*/;
+# Time: 2025-09-27T22:45:35.670286Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   133
+# Query_time: 2.015982  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013133;
+SELECT COUNT(*) FROM products /*traceparent='00-eefedde48b50d2b2a5e5f3e4877e3302-98802337b3e55d50-01'*/;
+# Time: 2025-09-27T22:45:36.943614Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 21.203513  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 1000000
+SET timestamp=1759013115;
+SELECT COUNT(*) FROM products WHERE (name LIKE '%限定業務用%' OR description LIKE '%限定業務用%') /*traceparent='00-7c576d579aee2c1aca92a7c6c8ef6fa7-3c39500b7c07c39b-01'*/;
+# Time: 2025-09-27T22:45:37.413810Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 2.041605  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013135;
+SELECT COUNT(*) FROM products /*traceparent='00-386a119b802ee4c17c84bab516c26501-4bef6b326c04b0b3-01'*/;
+# Time: 2025-09-27T22:45:37.655381Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 2.119345  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013135;
+SELECT COUNT(*) FROM products /*traceparent='00-d4358c1b2126aa6941700bb8d5140350-f565563c5f86c4ea-01'*/;
+# Time: 2025-09-27T22:45:38.625206Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 1.034944  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19924
+SET timestamp=1759013137;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 24
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-295acb921045c63f804fb4eee5ef6341-6da4130b825497fc-01'*/;
+# Time: 2025-09-27T22:45:39.574926Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 1.895453  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013137;
+SELECT COUNT(*) FROM products /*traceparent='00-db33b43844566d786d078fb19ae56089-2f4c7aed5bc88462-01'*/;
+# Time: 2025-09-27T22:45:40.682036Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   178
+# Query_time: 2.063846  Lock_time: 0.000002 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013138;
+SELECT COUNT(*) FROM products /*traceparent='00-821cf04caf380f4080a1f5c28e0d851a-c7e355e08cdf5e24-01'*/;
+# Time: 2025-09-27T22:45:40.833985Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   198
+# Query_time: 2.086951  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013138;
+SELECT COUNT(*) FROM products /*traceparent='00-d07610cb3d5434e17bf04d97647c586c-44a84fe21d6fe482-01'*/;
+# Time: 2025-09-27T22:45:40.869920Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   218
+# Query_time: 1.967885  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013138;
+SELECT COUNT(*) FROM products /*traceparent='00-21ab61fb41a25e7bbbc4febb588e4528-a2f33296bf5a1bf3-01'*/;
+# Time: 2025-09-27T22:45:41.778381Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   201
+# Query_time: 2.197055  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 0
+SET timestamp=1759013139;
+SELECT COUNT(*) FROM products /*traceparent='00-1c31d9504bfcc4da4b3126549eab8dbe-6c769d87b5a1d99c-01'*/;
+# Time: 2025-09-27T22:45:45.630854Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   206
+# Query_time: 1.047999  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19977
+SET timestamp=1759013144;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 53
+	 AND o.product_name LIKE '%カメラ第２１４６号%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-6e3c253bda547889f8d95e99d9b710f9-7f20d11d38574845-01'*/;
+# Time: 2025-09-27T22:45:46.278786Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   247
+# Query_time: 1.002008  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20071
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 58
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-617d2fa623e1b88545d9b7cd68627bc8-63a9d1252a5bfa21-01'*/;
+# Time: 2025-09-27T22:45:46.296254Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   248
+# Query_time: 1.014917  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20014
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 87
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e1ed5b267ac2c2bc44f35fad4164455c-683eac60ea31ba71-01'*/;
+# Time: 2025-09-27T22:45:46.460594Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   238
+# Query_time: 1.046419  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19873
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 9
+	 AND o.product_name LIKE '%携帯用ユニット%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-6d7cd2650bd3f7e8231a1d315b689247-14a9daf0bc1e313b-01'*/;
+# Time: 2025-09-27T22:45:46.506442Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   245
+# Query_time: 1.021222  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 20074
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 20
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-d0ac406087a569c17d44592d3aea4c3e-f8543671b5416e84-01'*/;
+# Time: 2025-09-27T22:45:46.511757Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   246
+# Query_time: 1.019724  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20115
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 23
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-2ce5ec2776215af503adc80fb8b8f0d5-814cd344359485e0-01'*/;
+# Time: 2025-09-27T22:45:46.545041Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   254
+# Query_time: 1.066005  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20254
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 32
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-7ef82ddfc037a5c96dd62350300ced82-18b9d23ad434edd7-01'*/;
+# Time: 2025-09-27T22:45:46.552478Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   255
+# Query_time: 1.019964  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19966
+SET timestamp=1759013145;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 18
+	 AND o.product_name LIKE '%器丙零式第９５７９号%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ffc570a7ca638e2889a643b704e9ec0c-7a4bb6b1139fa668-01'*/;
+# Time: 2025-09-27T22:45:47.316046Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   251
+# Query_time: 1.062511  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20011
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 95
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-e8e8409db57900a64c791310d0ca7a76-18f6852d27a6788c-01'*/;
+# Time: 2025-09-27T22:45:47.320204Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   249
+# Query_time: 1.168164  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19924
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 86
+	 AND o.product_name LIKE 'れが楽。最大約31時間の駆動設計で、スタ%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-7fae4e39c44dc6e84abd1c678d033fa3-40a1a8b984c1c67e-01'*/;
+# Time: 2025-09-27T22:45:47.330046Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   256
+# Query_time: 1.121014  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19876
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 73
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-709e5bb813754ea307f7c0f075341499-4da658261e326a25-01'*/;
+# Time: 2025-09-27T22:45:47.384932Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   253
+# Query_time: 1.201715  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 20095
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 23
+	 AND o.product_name LIKE '。長く使える一台です。 限定モデル。%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-90581794da5da85240bcae4836310533-3daf4e2130ee4545-01'*/;
+# Time: 2025-09-27T22:45:47.389646Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   242
+# Query_time: 1.045323  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19963
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 45
+	 AND o.product_name LIKE '滴高効率のボディ。最新世代コントローラを搭載し%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-92de8f50acf21c266b08f361a20955da-ac3dea44800cb40e-01'*/;
+# Time: 2025-09-27T22:45:47.402929Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   252
+# Query_time: 1.137169  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20296
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 5
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-5b9b81a753a7832d39b329d53cc52566-fe06103cbab1e342-01'*/;
+# Time: 2025-09-27T22:45:47.631581Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   255
+# Query_time: 1.017547  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19923
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 94
+	 AND o.product_name LIKE '限定薄型パック丙改良型第９８５９号%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-8c5d03ee2149855f591376200d8280bb-8d199cb14c8f3bcc-01'*/;
+# Time: 2025-09-27T22:45:47.664245Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   245
+# Query_time: 1.012186  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 19955
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 99
+	 AND o.product_name LIKE 'ユニット弐号機第７７０%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-30139d58038bd3dcf344f5e143913bec-ba7d4df76c8dc199-01'*/;
+# Time: 2025-09-27T22:45:47.828387Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   257
+# Query_time: 1.084353  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20082
+SET timestamp=1759013146;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 44
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-6d463900bf39a54c931af95ff18f80c8-5490fb19e9a1719d-01'*/;
+# Time: 2025-09-27T22:45:48.697766Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   245
+# Query_time: 1.024517  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20262
+SET timestamp=1759013147;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 62
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-906b476664a297d4ca86be8b4becec09-77f1a87d034cb7d1-01'*/;
+# Time: 2025-09-27T22:45:48.704028Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   246
+# Query_time: 1.241312  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20022
+SET timestamp=1759013147;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 19
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-d0d8f87e5edae8146ede7bfdba8d98e7-195af7e49dc6007d-01'*/;
+# Time: 2025-09-27T22:45:48.723965Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   255
+# Query_time: 1.058345  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 20234
+SET timestamp=1759013147;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 32
+	 AND o.product_name LIKE '%ット改型式エヤク-３２４１第８４８１%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-aa7670e849c912c6bb9651784f232d88-b928231707efccca-01'*/;
+# Time: 2025-09-27T22:45:49.103407Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   241
+# Query_time: 1.005375  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19913
+SET timestamp=1759013148;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 63
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-93262749880989ca1823a319f16a9ad9-4f0e2b2ebd23f2f7-01'*/;
+# Time: 2025-09-27T22:45:49.114942Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   243
+# Query_time: 1.013848  Lock_time: 0.000001 Rows_sent: 1  Rows_examined: 20234
+SET timestamp=1759013148;
+SELECT COUNT(*)
+		FROM orders o
+		WHERE 1=1
+		AND o.user_id = 32
+	 AND o.product_name LIKE 'ヘッドセット第２７４６号%' /*traceparent='00-0e97c3c672f6ee682274769930e4ae2f-b627d1837376630b-01'*/;
+# Time: 2025-09-27T22:45:49.137558Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   248
+# Query_time: 1.003922  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20277
+SET timestamp=1759013148;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 30
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-a7e87a1c249a797eb79c474859c52c14-9f5e4855d7718aef-01'*/;
+# Time: 2025-09-27T22:45:49.397229Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   252
+# Query_time: 1.027196  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20046
+SET timestamp=1759013148;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 100
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-887fdb629f44f1e877087651a4003ed9-a2860c0a15ea2f18-01'*/;
+# Time: 2025-09-27T22:45:49.860910Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   259
+# Query_time: 1.002257  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20095
+SET timestamp=1759013148;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 27
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-5ca6d757060998fb409685f24d168ef6-e4d2e6f1769612f1-01'*/;
+# Time: 2025-09-27T22:45:50.527188Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   243
+# Query_time: 1.248155  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20254
+SET timestamp=1759013149;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 32
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-fdf868ffcdef6253b70f697457db79c8-074cdab61302331c-01'*/;
+# Time: 2025-09-27T22:45:51.633963Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   253
+# Query_time: 1.012135  Lock_time: 0.000002 Rows_sent: 20  Rows_examined: 19985
+SET timestamp=1759013150;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 81
+	 ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3925fb9b6656018b37545de8f147cbd1-e2bc9570cdd93821-01'*/;
+# Time: 2025-09-27T22:45:51.838093Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   256
+# Query_time: 1.294051  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 19921
+SET timestamp=1759013150;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 83
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-3cc9413a5e4e305cf7a6223c46401c84-806512732f7171be-01'*/;
+# Time: 2025-09-27T22:45:52.942029Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   242
+# Query_time: 1.056996  Lock_time: 0.000001 Rows_sent: 0  Rows_examined: 20176
+SET timestamp=1759013151;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 93
+	 AND o.product_name LIKE '%高剛性キット改型式メムン-８５５７第６%' ORDER BY o.created_at DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-ed25a15a0ce8c5997b845d6e60611ce0-a517fdb78f8796ae-01'*/;
+# Time: 2025-09-27T22:45:53.614747Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   247
+# Query_time: 1.209707  Lock_time: 0.000001 Rows_sent: 20  Rows_examined: 20011
+SET timestamp=1759013152;
+SELECT 
+			o.order_id, 
+			o.product_id, 
+			o.product_name,
+		    o.shipped_status,
+			o.product_weight,
+			o.product_value,
+			o.created_at, 
+			o.arrived_at
+		FROM 
+			orders o
+		WHERE 1 = 1
+		AND o.user_id = 95
+	 ORDER BY o.shipped_status DESC, o.order_id ASC LIMIT 20 OFFSET 0 /*traceparent='00-0536411e762810291cb0f3e0f3116c40-629050f05739ad11-01'*/;
+# Time: 2025-09-27T22:46:00.151822Z
+# User@Host: user[user] @  [172.18.0.4]  Id:   240
+# Query_time: 12.992789  Lock_time: 0.000001 Rows_sent: 1000061  Rows_examined: 2000122
+SET timestamp=1759013147;
+SELECT
+			order_id,
+			product_id,
+			product_name,
+			product_weight,
+			product_value
+		FROM orders
+		WHERE shipped_status = 'shipping'
+		AND product_weight <= 100
+		ORDER BY product_value DESC, product_weight ASC, order_id ASC;
+	 /*traceparent='00-f65923da4dd95ae70a8cb5dd806bd01f-52d295a246400456-01'*/;

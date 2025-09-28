@@ -27,11 +27,11 @@ func NewServer() (*Server, *sqlx.DB, error) {
 		return nil, nil, err
 	}
 
-	deliveryCache := cache.New(30*time.Second, 30*time.Second)
+	sessionCache := cache.New(24*time.Hour, 10*time.Minute)
 
-	store := repository.NewStore(dbConn, deliveryCache)
+	store := repository.NewStore(dbConn, sessionCache)
 
-	authService := service.NewAuthService(store, deliveryCache)
+	authService := service.NewAuthService(store, sessionCache)
 	orderService := service.NewOrderService(store)
 	productService := service.NewProductService(store)
 	robotService := service.NewRobotService(store)
