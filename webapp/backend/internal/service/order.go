@@ -5,6 +5,9 @@ import (
 	"backend/internal/repository"
 	"backend/internal/service/utils"
 	"context"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 type OrderService struct {
@@ -17,6 +20,14 @@ func NewOrderService(store *repository.Store) *OrderService {
 
 // ユーザーの注文履歴を取得
 func (s *OrderService) FetchOrders(ctx context.Context, userID int, req model.ListRequest) ([]model.Order, int, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "FetchOrders")
+	defer span.End()
+	span.SetAttributes(
+		attribute.Int("user.id", userID),
+		attribute.Int("page", req.Page),
+		attribute.Int("pageSize", req.PageSize),
+	)
 	var orders []model.Order
 	var total int
 	err := utils.WithTimeout(ctx, func(ctx context.Context) error {

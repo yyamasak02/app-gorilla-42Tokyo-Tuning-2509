@@ -122,6 +122,9 @@ func (r *OrderRepository) GetShippingOrders(ctx context.Context, capacity int) (
 
 // 注文履歴一覧を取得
 func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.ListRequest) ([]model.Order, int, error) {
+	tracer := otel.Tracer("app/custom")
+	ctx, span := tracer.Start(ctx, "ListOrders")
+	defer span.End()
 	type orderRow struct {
 		OrderID       int          `db:"order_id"`
 		ProductID     int          `db:"product_id"`
@@ -191,6 +194,11 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 
 	// データ取得
 	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+		span.SetAttributes(
+			attribute.Int("user.id", userID),
+			attribute.String("place", "r.db.SelectContext"),
+			attribute.String("error", err.Error()),
+		)
 		return nil, 0, err
 	}
 
@@ -204,6 +212,11 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 	` + strings.ReplaceAll(whereClause, "p.name", "o.product_name")
 	countArgs := args[:len(args)-2] // LIMIT/OFFSETを除外
 	if err := r.db.GetContext(ctx, &total, countQuery, countArgs...); err != nil {
+		span.SetAttributes(
+			attribute.Int("user.id", userID),
+			attribute.String("place", "r.db.GetContext"),
+			attribute.String("error", err.Error()),
+		)
 		return nil, 0, err
 	}
 
@@ -221,6 +234,11 @@ func (r *OrderRepository) ListOrders(ctx context.Context, userID int, req model.
 			ArrivedAt:     o.ArrivedAt,
 		})
 	}
+
+	span.SetAttributes(
+		attribute.Int("user.id", userID),
+		attribute.Int("total", total),
+	)
 
 	return orders, total, nil
 }
