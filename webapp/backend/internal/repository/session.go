@@ -2,48 +2,24 @@ package repository
 
 import (
 	"context"
-	"time"
+	"errors"
 
-	"github.com/google/uuid"
+	"github.com/patrickmn/go-cache"
 )
 
 type SessionRepository struct {
-	db DBTX
+	db    DBTX
+	Cache *cache.Cache
 }
 
-func NewSessionRepository(db DBTX) *SessionRepository {
-	return &SessionRepository{db: db}
-}
-
-// セッションを作成し、セッションIDと有効期限を返す
-func (r *SessionRepository) Create(ctx context.Context, userBusinessID int, duration time.Duration) (string, time.Time, error) {
-	sessionUUID, err := uuid.NewRandom()
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	expiresAt := time.Now().Add(duration)
-	sessionIDStr := sessionUUID.String()
-
-	query := "INSERT INTO user_sessions (session_uuid, user_id, expires_at) VALUES (?, ?, ?)"
-	_, err = r.db.ExecContext(ctx, query, sessionIDStr, userBusinessID, expiresAt)
-	if err != nil {
-		return "", time.Time{}, err
-	}
-	return sessionIDStr, expiresAt, nil
+func NewSessionRepository(db DBTX, cache *cache.Cache) *SessionRepository {
+	return &SessionRepository{db: db, Cache: cache}
 }
 
 // セッションIDからユーザーIDを取得
 func (r *SessionRepository) FindUserBySessionID(ctx context.Context, sessionID string) (int, error) {
-	var userID int
-	query := `
-		SELECT 
-			u.user_id
-		FROM users u
-		JOIN user_sessions s ON u.user_id = s.user_id
-		WHERE s.session_uuid = ? AND s.expires_at > ?`
-	err := r.db.GetContext(ctx, &userID, query, sessionID, time.Now())
-	if err != nil {
-		return 0, err
+	if userID, found := r.Cache.Get(sessionID); found {
+		return userID.(int), nil
 	}
-	return userID, nil
+	return 0, errors.New("invalid session")
 }

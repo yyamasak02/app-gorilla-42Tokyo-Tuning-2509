@@ -10,6 +10,8 @@ import (
 	"backend/internal/repository"
 	"backend/internal/service/utils"
 
+	"github.com/google/uuid"
+	"github.com/patrickmn/go-cache"
 	"go.opentelemetry.io/otel"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,10 +24,11 @@ var (
 
 type AuthService struct {
 	store *repository.Store
+	Cache *cache.Cache
 }
 
-func NewAuthService(store *repository.Store) *AuthService {
-	return &AuthService{store: store}
+func NewAuthService(store *repository.Store, cache *cache.Cache) *AuthService {
+	return &AuthService{store: store, Cache: cache}
 }
 
 func (s *AuthService) Login(ctx context.Context, userName, password string) (string, time.Time, error) {
@@ -52,11 +55,16 @@ func (s *AuthService) Login(ctx context.Context, userName, password string) (str
 		}
 
 		sessionDuration := 24 * time.Hour
-		sessionID, expiresAt, err = s.store.SessionRepo.Create(ctx, user.UserID, sessionDuration)
+		sessionID_uuid, err := uuid.NewRandom()
 		if err != nil {
 			log.Printf("[Login] セッション生成失敗: %v", err)
 			return ErrInternalServer
 		}
+		sessionID = sessionID_uuid.String()
+		expiresAt = time.Now().Add(sessionDuration)
+
+		s.Cache.Set(sessionID, user.UserID, sessionDuration)
+
 		return nil
 	})
 	if err != nil {

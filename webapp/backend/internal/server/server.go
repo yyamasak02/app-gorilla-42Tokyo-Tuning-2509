@@ -9,9 +9,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
+	"github.com/patrickmn/go-cache"
 	"github.com/riandyrn/otelchi"
 )
 
@@ -25,9 +27,11 @@ func NewServer() (*Server, *sqlx.DB, error) {
 		return nil, nil, err
 	}
 
-	store := repository.NewStore(dbConn)
+	deliveryCache := cache.New(30*time.Second, 30*time.Second)
 
-	authService := service.NewAuthService(store)
+	store := repository.NewStore(dbConn, deliveryCache)
+
+	authService := service.NewAuthService(store, deliveryCache)
 	orderService := service.NewOrderService(store)
 	productService := service.NewProductService(store)
 	robotService := service.NewRobotService(store)

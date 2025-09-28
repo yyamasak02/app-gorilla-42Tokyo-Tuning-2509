@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/patrickmn/go-cache"
 )
 
 type Store struct {
@@ -14,11 +15,11 @@ type Store struct {
 	OrderRepo   *OrderRepository
 }
 
-func NewStore(db DBTX) *Store {
+func NewStore(db DBTX, cache *cache.Cache) *Store {
 	return &Store{
 		db:          db,
 		UserRepo:    NewUserRepository(db),
-		SessionRepo: NewSessionRepository(db),
+		SessionRepo: NewSessionRepository(db, cache),
 		ProductRepo: NewProductRepository(db),
 		OrderRepo:   NewOrderRepository(db),
 	}
@@ -36,7 +37,7 @@ func (s *Store) ExecTx(ctx context.Context, fn func(txStore *Store) error) error
 	}
 	defer tx.Rollback()
 
-	txStore := NewStore(tx)
+	txStore := NewStore(tx, s.SessionRepo.Cache)
 	if err := fn(txStore); err != nil {
 		return err
 	}
